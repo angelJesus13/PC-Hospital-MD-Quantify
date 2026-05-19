@@ -1,18 +1,40 @@
 # DataModels
 
-Esta carpeta concentra los modelos de datos y artefactos relacionados con el procesamiento analitico del proyecto `PC-Hospital-MD-Quantify`.
+## Descripcion general
 
-## Estructura
+La carpeta `DataModels` centraliza los artefactos relacionados con el modelado de datos y el analisis inteligente del proyecto `PC-Hospital-MD-Quantify`. Su objetivo es mantener organizados los recursos utilizados para entrenar, evaluar y documentar los modelos que apoyan la interpretacion de la informacion clinica y operativa del sistema.
 
-- `Supervised_LMs/`: modelos supervisados, entrenamientos, metricas y evidencias asociadas.
-- `Unsupervised_LMs/`: modelos no supervisados, agrupamientos, reduccion de dimensionalidad y resultados exploratorios.
+## Objetivo
 
-## Proposito
+Esta seccion del repositorio sirve como punto de referencia para:
 
-Aqui se documentan y almacenan los recursos necesarios para el desarrollo, evaluacion y trazabilidad de los modelos utilizados dentro del proyecto.
+- almacenar modelos desarrollados durante el proyecto;
+- conservar evidencia de experimentacion y evaluacion;
+- facilitar la trazabilidad de resultados;
+- apoyar la reproducibilidad del trabajo analitico.
 
-## Convenciones sugeridas
+## Estructura de carpetas
 
-- Incluir notebooks, scripts o reportes con nombres descriptivos.
-- Guardar resultados relevantes junto con su documentacion.
-- Mantener evidencia suficiente para reproducir entrenamientos y pruebas.
+| Carpeta | Descripcion |
+| --- | --- |
+| `Supervised_LMs/` | Modelos supervisados, entrenados con una variable objetivo conocida. |
+| `Unsupervised_LMs/` | Modelos no supervisados enfocados en descubrimiento de patrones, agrupamientos o estructura oculta en los datos. |
+
+## Contenido esperado
+
+Dentro de esta carpeta pueden incluirse:
+
+- notebooks de exploracion, entrenamiento o validacion;
+- scripts de preprocesamiento y modelado;
+- modelos exportados o serializados;
+- reportes de resultados;
+- graficas, metricas y evidencia experimental.
+
+## Lineamientos de documentacion
+
+Para mantener esta seccion clara y util, se recomienda:
+
+- usar nombres descriptivos para archivos y carpetas;
+- documentar el origen de los datos utilizados;
+- registrar metricas relevantes por experimento;
+- mantener evidencia suficiente para reproducir entrenamientos y pruebas.

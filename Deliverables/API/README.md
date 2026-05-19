@@ -1,13 +1,26 @@
 # API
 
-Esta carpeta contiene los entregables asociados a la API del proyecto.
+## Descripcion general
 
-## Estructura
+La carpeta `API` contiene los entregables correspondientes al servicio backend del proyecto. En este espacio se organiza la documentacion y los recursos necesarios para desarrollar, compilar y desplegar la API.
 
-- `build/`: archivos generados para compilacion o empaquetado.
-- `DeployManual/`: documentacion para despliegue e instalacion.
-- `source/`: codigo fuente de la API.
+## Objetivo
 
-## Proposito
+Su objetivo es separar de forma clara el codigo fuente, los artefactos generados y la documentacion tecnica, facilitando el mantenimiento del servicio y su entrega.
 
-Separar claramente el codigo fuente, los artefactos generados y la documentacion necesaria para construir, ejecutar y desplegar la API.
+## Estructura interna
+
+| Carpeta | Descripcion |
+| --- | --- |
+| `source/` | Codigo fuente de la API y archivos necesarios para su desarrollo. |
+| `build/` | Artefactos generados durante compilacion, empaquetado o preparacion de entrega. |
+| `DeployManual/` | Documentacion de instalacion, configuracion y despliegue. |
+
+## Alcance de la carpeta
+
+Dentro de esta seccion deben concentrarse los elementos esenciales para:
+
+- implementar la API;
+- preparar versiones listas para distribucion;
+- documentar el procedimiento de puesta en marcha;
+- respaldar futuras actualizaciones o mantenimiento.
