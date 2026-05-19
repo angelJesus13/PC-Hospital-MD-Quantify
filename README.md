@@ -1,5 +1,11 @@
 # QUANTIFY - Habit Tracker & Gamification Engine
 
+## Logo
+
+<p align="center">
+  <img src="./assets/logo.jpg" alt="Quantify Technology Logo" width="250" style="border-radius: 8px;" />
+</p>
+
 ## DESCRIPCIÓN
 Quantify es una plataforma de ingeniería aplicada al bienestar personal. No es solo un rastreador de hábitos; es un motor de gamificación avanzado que utiliza una arquitectura híbrida para monitorear, analizar y premiar la disciplina humana mediante métricas de precisión y algoritmos de racha real.
 
@@ -29,11 +35,11 @@ Desarrollar un ecosistema digital integral que fomente la creación de hábitos 
 
 ## TABLA DE COLABORADORES
 | Colaborador | Rol | Github |
-|-------------|-----|--------|
-| Angel de Jesús | Tech Lead & Architecture | @angelJesus13 |
-| Francisco Garcia G | Lead Backend Developer | @DevFntxy |
-| Farias Leyva | Frontend & Documentation | @farias |
-| Artiaga Morales | QA & Data Science | @artiaga |
+| :--- | :--- | :--- |
+| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) |
+| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) |
 
 ## INSTALACIÓN RÁPIDA
 - Clonar el repositorio.
