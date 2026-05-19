@@ -37,3 +37,12 @@ Para mantener esta seccion clara y util, se recomienda:
 - registrar detalladamente los tipos de datos en los diccionarios, considerando documentos anidados;
 - mantener registros limpios y fechados de los respaldos;
 - documentar el proposito de los indices creados en las colecciones.
+
+### TABLA DE COLABORADORES
+| Colaborador | Rol | Github |
+| :--- | :--- | :--- |
+| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) |
+| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) |

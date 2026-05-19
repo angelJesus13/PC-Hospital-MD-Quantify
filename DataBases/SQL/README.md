@@ -38,3 +38,12 @@ Para mantener esta seccion clara y util, se recomienda:
 - actualizar invariablemente los diagramas (ERD y RM) cuando se agregue o modifique una tabla;
 - registrar la fecha y la version en los archivos `.sql` de respaldos y migraciones;
 - documentar claramente las restricciones y llaves primarias/foraneas en los diccionarios.
+
+### TABLA DE COLABORADORES
+| Colaborador | Rol | Github |
+| :--- | :--- | :--- |
+| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) |
+| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) |
