@@ -47,3 +47,4 @@ Fomentar la adopción persistente mediante un sistema dinámico de recompensas e
 | **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |
 | **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) |
