@@ -38,8 +38,8 @@ A continuación se presenta la arquitectura de carpetas del repositorio, destaca
         *   📁 `FRs/`
         *   📂 `GUIs/`
             *   📁 `WearableApp/`
-            *   📂 **WebApp/**  ◄── 🚀 **[ESTÁS EXPLORANDO ESTA CARPETA]**
-                *   📄 **README.md**  ◄── ⚡ *[Archivo en pantalla]*
+            *   📂 **WebApp/**  ◄── 
+                *   📄 **README.md**  ◄── 
             *   📄 `README.md`
         *   📁 `NFRs/`
         *   📁 `UHs/`

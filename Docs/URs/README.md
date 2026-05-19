@@ -38,9 +38,9 @@ A continuación se presenta la arquitectura de carpetas del repositorio, destaca
         *   📁 `GUIs/`
         *   📁 `NFRs/`
         *   📁 `UHs/`
-        *   📂 **URs/**  ◄── 🚀 **[ESTÁS EXPLORANDO ESTA CARPETA]**
+        *   📂 **URs/**  ◄── 
             *   📄 `.gitkeep`
-            *   📄 **README.md**  ◄── ⚡ *[Archivo en pantalla]*
+            *   📄 **README.md**  ◄── 
 
 ---
 
