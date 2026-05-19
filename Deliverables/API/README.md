@@ -24,3 +24,11 @@ Dentro de esta seccion deben concentrarse los elementos esenciales para:
 - preparar versiones listas para distribucion;
 - documentar el procedimiento de puesta en marcha;
 - respaldar futuras actualizaciones o mantenimiento.
+
+## Evaluacion de calidad
+
+La evidencia base para la evaluacion intergrupal de calidad de la API se encuentra en:
+
+- [`API_Quality_Evaluation.md`](API_Quality_Evaluation.md)
+
+Este documento incluye criterios de evaluacion, checklist entre pares, matriz de puntaje, riesgos y observaciones sugeridas.
