@@ -24,3 +24,13 @@ Dentro de esta seccion deben concentrarse los elementos esenciales para:
 - preparar versiones listas para distribucion;
 - documentar el procedimiento de puesta en marcha;
 - respaldar futuras actualizaciones o mantenimiento.
+
+## Equipo de Desarrollo
+
+| Integrante | Contacto | Rol | Observaciones |
+| --- | --- | --- | --- |
+| Angel de Jesus Banos Tellez | Pendiente | Lider de desarrollo | Revisado y aprobado |
+| Francisco Garcia Garcia | Pendiente | Desarrollador | Revisado y aprobado |
+| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | Revisado y aprobado |
+| Al Farias Leyva | Pendiente | Desarrollador | Revisado y aprobado |
+| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | Revisado y aprobado |

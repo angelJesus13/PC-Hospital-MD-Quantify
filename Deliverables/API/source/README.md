@@ -26,3 +26,13 @@ Para mantener el codigo ordenado, se recomienda:
 - usar nombres consistentes para archivos y directorios;
 - documentar componentes clave cuando sea necesario;
 - mantener esta carpeta enfocada en codigo fuente y no en artefactos generados.
+
+## Equipo de Desarrollo
+
+| Integrante | Contacto | Rol | Observaciones |
+| --- | --- | --- | --- |
+| Angel de Jesus Banos Tellez | Pendiente | Lider de desarrollo | Revisado y aprobado |
+| Francisco Garcia Garcia | Pendiente | Desarrollador | Revisado y aprobado |
+| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | Revisado y aprobado |
+| Al Farias Leyva | Pendiente | Desarrollador | Revisado y aprobado |
+| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | Revisado y aprobado |
