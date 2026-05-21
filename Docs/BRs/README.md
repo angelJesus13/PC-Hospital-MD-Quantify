@@ -39,7 +39,7 @@ Fomentar la adopción persistente mediante un sistema dinámico de recompensas e
 
 ---
 
-##  Equipo de Desarrollo
+## Equipo de Desarrollo
 
 | Colaborador | Rol | Github | Estado |
 | :--- | :--- | :--- | :--- |
@@ -48,3 +48,4 @@ Fomentar la adopción persistente mediante un sistema dinámico de recompensas e
 | **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | En revisión |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En revisión |
 | **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | En revisión |
+
