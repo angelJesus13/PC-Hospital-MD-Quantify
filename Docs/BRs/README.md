@@ -41,10 +41,10 @@ Fomentar la adopción persistente mediante un sistema dinámico de recompensas e
 
 ##  Equipo de Desarrollo
 
-| Colaborador | Rol | Github |
-| :--- | :--- | :--- |
-| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) |
-| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |
-| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) |
-| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) |
-| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) |
+| Colaborador | Rol | Github | Estado |
+| :--- | :--- | :--- | :--- |
+| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Completado |
+| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | En revisión |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | En revisión |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En revisión |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | En revisión |
