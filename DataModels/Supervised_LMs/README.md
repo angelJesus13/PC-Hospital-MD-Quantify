@@ -37,3 +37,13 @@ Para mejorar la trazabilidad del trabajo, conviene:
 - registrar hiperparametros relevantes;
 - asociar resultados con fecha o version del experimento;
 - conservar evidencia de pruebas y validaciones.
+
+## Equipo de Desarrollo
+
+| Integrante | Contacto | Rol | Observaciones |
+| --- | --- | --- | --- |
+| Angel de Jesus Banos Tellez | Pendiente | Lider de desarrollo | En revision |
+| Francisco Garcia Garcia | Pendiente | Desarrollador | En revision |
+| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | En revision |
+| Al Farias Leyva | Pendiente | Desarrollador | Revisado y completado |
+| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | En revision |

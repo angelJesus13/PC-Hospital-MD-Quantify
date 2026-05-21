@@ -24,3 +24,13 @@ La documentacion ubicada aqui debe contemplar, cuando aplique:
 ## Recomendacion
 
 Para que el manual sea util para cualquier integrante del equipo, conviene redactarlo paso a paso e incluir las decisiones tecnicas importantes relacionadas con el despliegue.
+
+## Equipo de Desarrollo
+
+| Integrante | Contacto | Rol | Observaciones |
+| --- | --- | --- | --- |
+| Angel de Jesus Banos Tellez | Pendiente | Lider de desarrollo | En revision |
+| Francisco Garcia Garcia | Pendiente | Desarrollador | En revision |
+| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | En revision |
+| Al Farias Leyva | Pendiente | Desarrollador | Revisado y completado |
+| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | En revision |

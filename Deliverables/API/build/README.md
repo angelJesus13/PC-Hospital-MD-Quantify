@@ -22,3 +22,13 @@ En esta carpeta pueden encontrarse:
 - El contenido puede variar dependiendo de la tecnologia empleada.
 - No sustituye a la carpeta `source/`, ya que aqui solo deben ubicarse productos generados.
 - Se recomienda conservar unicamente versiones relevantes para la entrega o despliegue.
+
+## Equipo de Desarrollo
+
+| Integrante | Contacto | Rol | Observaciones |
+| --- | --- | --- | --- |
+| Angel de Jesus Banos Tellez | Pendiente | Lider de desarrollo | En revision |
+| Francisco Garcia Garcia | Pendiente | Desarrollador | En revision |
+| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | En revision |
+| Al Farias Leyva | Pendiente | Desarrollador | Revisado y completado |
+| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | En revision |
