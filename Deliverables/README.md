@@ -38,8 +38,8 @@ La finalidad de esta carpeta es que cada componente del sistema cuente con una e
 
 | Integrante | Contacto | Rol | Observaciones |
 | --- | --- | --- | --- |
-| Angel de Jesus Banos Tellez | Pendiente | Lider de desarrollo | Revisado y aprobado |
-| Francisco Garcia Garcia | Pendiente | Desarrollador | Revisado y aprobado |
-| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | Revisado y aprobado |
-| Al Farias Leyva | Pendiente | Desarrollador | Revisado y aprobado |
-| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | Revisado y aprobado |
+| Angel de Jesus Banos Tellez | Pendiente | Lider de desarrollo | En revision |
+| Francisco Garcia Garcia | Pendiente | Desarrollador | En revision |
+| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | En revision |
+| Al Farias Leyva | Pendiente | Desarrollador | Revisado y completado |
+| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | En revision |
