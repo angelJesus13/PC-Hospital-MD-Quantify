@@ -27,10 +27,11 @@ Dentro de esta seccion deben concentrarse los elementos esenciales para:
 
 ## Equipo de Desarrollo
 
-| Integrante | Contacto | Rol | Observaciones |
-| --- | --- | --- | --- |
-| Angel de Jesus Banos Tellez | Pendiente | Lider de desarrollo | En revision |
-| Francisco Garcia Garcia | Pendiente | Desarrollador | En revision |
-| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | En revision |
-| Al Farias Leyva | Pendiente | Desarrollador | Revisado y completado |
-| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | En revision |
+| Colaborador | Rol | Github | Estado |
+| :--- | :--- | :--- | :--- |
+| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
+| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Completado |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | En Revision |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revision |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | En Revision |
+

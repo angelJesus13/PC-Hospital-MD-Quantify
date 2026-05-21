@@ -40,13 +40,14 @@ La carpeta `source` centraliza el desarrollo tecnico de la WearableApp. Su separ
 
 ## Equipo de Desarrollo
 
-| Integrante | Contacto | Rol | Observaciones |
-| --- | --- | --- | --- |
-| Angel de Jesus Baños Tellez | Pendiente | Lider de desarrollo | Revisado y aprobado |
-| Francisco Garcia Garcia | Pendiente | Desarrollador | Revisado y aprobado |
-| Jesus Alejandro Artiaga Morales | Pendiente | Desarrollador | Revisado y aprobado |
-| Al Farias Leyva | Pendiente | Desarrollador | Revisado y aprobado |
-| Brian Jesus Mendoza Marquez | Pendiente | Desarrollador | Revisado y aprobado |
+| Colaborador | Rol | Github | Estado |
+| :--- | :--- | :--- | :--- |
+| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
+| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | En Revision |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Completado |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revision |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | En Revision |
+
 
 ## Estado
 
