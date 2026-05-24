@@ -47,7 +47,7 @@ Esta carpeta funciona como punto central para los entregables de la WearableApp.
 | **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | En Revision |
 | **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Completado |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revision |
-| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | En Revision |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |
 
 
 ## Estado
