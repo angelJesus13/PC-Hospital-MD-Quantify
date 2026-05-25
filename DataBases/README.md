@@ -44,5 +44,5 @@ Para mantener esta seccion clara y util, se recomienda:
 | **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Completado |
 | **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | En Revision |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revision |
-| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | En Revision |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |
 
