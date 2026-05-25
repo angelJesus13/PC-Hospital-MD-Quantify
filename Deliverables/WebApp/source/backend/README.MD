@@ -137,6 +137,6 @@ Gracias a su arquitectura modular y escalable, el sistema puede mantenerse organ
 | **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
 | **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | En Revision |
 | **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | En Revision |
-| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revision |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Completado |
 | **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Completado |
 

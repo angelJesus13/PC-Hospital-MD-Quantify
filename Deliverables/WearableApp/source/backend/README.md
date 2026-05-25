@@ -47,7 +47,7 @@ El backend permite que la WearableApp gestione correctamente la informacion capt
 | **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
 | **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | En Revision |
 | **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Completado |
-| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revision |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Completado |
 | **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |
 
 
