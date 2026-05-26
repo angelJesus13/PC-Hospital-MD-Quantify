@@ -82,9 +82,9 @@ A continuación se detalla la arquitectura de documentación conceptual del proy
 | :--- | :--- | :--- | :--- |
 | **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
 | **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Revisado y Aprobado |
-| **Al Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado confirmado |
-| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Completado |
-| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |
+| **Al Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Revisado y Aprobado |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Revisado y Aprobado |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Revisado y Aprobado |
 
 ---
 
