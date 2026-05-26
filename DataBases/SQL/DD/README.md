@@ -262,6 +262,6 @@ Score ≥ 5 → Alerta crítica automática en MongoDB `valoraciones_flexibles`.
 | :--- | :--- | :--- | :--- |
 | **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
 | **Francisco Garcia** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |  Revisado y Aprobado |
-| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | En Revision |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado confirmado |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revision |
 | **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |
