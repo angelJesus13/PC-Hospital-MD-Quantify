@@ -1,107 +1,107 @@
-# Evaluacion de Calidad de la API
+# Evaluación de Calidad de la API
 
-## Descripcion general
+## Descripción general
 
-Este documento concentra la evaluacion de calidad de la API del proyecto **PC-Hospital-MD-Quantify**. Su objetivo es servir como evidencia para la revision intergrupal entre pares, considerando aspectos funcionales, tecnicos, de seguridad, documentacion y mantenibilidad.
+Este documento concentra la evaluación de calidad de la API del proyecto **PC-Hospital-MD-Quantify**. Su objetivo es servir como evidencia para la revisión intergrupal entre pares, considerando aspectos funcionales, técnicos, de seguridad, documentación y mantenibilidad.
 
-La evaluacion permite identificar fortalezas, riesgos y areas de mejora antes de integrar la API con las aplicaciones WebApp y WearableApp.
+La evaluación permite identificar fortalezas, riesgos y áreas de mejora antes de integrar la API con las aplicaciones WebApp y WearableApp.
 
-## Datos de la revision
+## Datos de la revisión
 
 | Campo | Valor |
 | --- | --- |
 | Proyecto | PC-Hospital-MD-Quantify |
-| Modulo evaluado | API |
-| Tipo de evaluacion | Intergrupal - Entre pares |
-| Fecha de revision | 19 de mayo de 2026 |
-| Estado | En revision |
-| Equipo evaluador | Pendiente de asignacion |
+| Módulo evaluado | API |
+| Tipo de evaluación | Intergrupal - Entre pares |
+| Fecha de revisión | 19 de mayo de 2026 |
+| Estado | En revisión |
+| Equipo evaluador | Pendiente de asignación |
 | Equipo evaluado | Equipo Quantify |
 
-## Alcance de la evaluacion
+## Alcance de la evaluación
 
-La evaluacion se enfoca en verificar que la API cumpla con criterios minimos de calidad para un sistema orientado al registro, consulta y procesamiento de informacion clinica, operativa y de monitoreo.
+La evaluación se enfoca en verificar que la API cumpla con criterios mínimos de calidad para un sistema orientado al registro, consulta y procesamiento de información clínica, operativa y de monitoreo.
 
 Se consideran los siguientes componentes:
 
 - estructura del proyecto backend;
 - endpoints principales;
-- validacion de entradas;
+- validación de entradas;
 - manejo de errores;
-- seguridad basica;
+- seguridad básica;
 - consistencia de respuestas;
-- conexion con bases de datos;
-- documentacion tecnica;
+- conexión con bases de datos;
+- documentación técnica;
 - facilidad de despliegue;
-- preparacion para pruebas y mantenimiento.
+- preparación para pruebas y mantenimiento.
 
 ## Criterios de calidad
 
-| Criterio | Descripcion | Peso |
+| Criterio | Descripción | Peso |
 | --- | --- | --- |
 | Funcionalidad | La API cumple con las operaciones esperadas y responde correctamente a los flujos definidos. | 20% |
-| Confiabilidad | La API maneja errores, entradas invalidas y condiciones inesperadas sin fallar de forma critica. | 15% |
-| Seguridad | La API protege informacion sensible, valida accesos y evita exposicion innecesaria de datos. | 15% |
+| Confiabilidad | La API maneja errores, entradas inválidas y condiciones inesperadas sin fallar de forma crítica. | 15% |
+| Seguridad | La API protege información sensible, valida accesos y evita exposición innecesaria de datos. | 15% |
 | Rendimiento | La API mantiene tiempos de respuesta adecuados en operaciones comunes. | 10% |
-| Mantenibilidad | El codigo y la estructura permiten entender, modificar y ampliar el servicio. | 15% |
-| Documentacion | La API cuenta con instrucciones, rutas, parametros y respuestas documentadas. | 15% |
-| Integracion | La API puede conectarse con la base de datos y otros modulos del sistema. | 10% |
+| Mantenibilidad | El código y la estructura permiten entender, modificar y ampliar el servicio. | 15% |
+| Documentación | La API cuenta con instrucciones, rutas, parámetros y respuestas documentadas. | 15% |
+| Integración | La API puede conectarse con la base de datos y otros módulos del sistema. | 10% |
 
-## Escala de evaluacion
+## Escala de evaluación
 
-| Puntaje | Nivel | Interpretacion |
+| Puntaje | Nivel | Interpretación |
 | --- | --- | --- |
 | 5 | Excelente | Cumple completamente y no requiere cambios importantes. |
 | 4 | Bueno | Cumple correctamente, con detalles menores por mejorar. |
 | 3 | Aceptable | Cumple parcialmente, pero requiere ajustes visibles. |
 | 2 | Deficiente | Presenta fallas importantes que afectan el uso esperado. |
-| 1 | Critico | No cumple o impide validar el funcionamiento del componente. |
+| 1 | Crítico | No cumple o impide validar el funcionamiento del componente. |
 
-## Checklist de revision
+## Checklist de revisión
 
 | ID | Aspecto revisado | Evidencia esperada | Puntaje | Observaciones |
 | --- | --- | --- | --- | --- |
-| API-01 | La API cuenta con estructura clara de carpetas. | Separacion de rutas, controladores, servicios o archivos equivalentes. | Pendiente | Pendiente |
-| API-02 | Los endpoints principales estan definidos. | Rutas para crear, consultar, actualizar o eliminar informacion segun aplique. | Pendiente | Pendiente |
-| API-03 | Las respuestas son consistentes. | Uso uniforme de codigos HTTP, mensajes y formato JSON. | Pendiente | Pendiente |
-| API-04 | Existe validacion de datos de entrada. | Validacion de campos obligatorios, tipos de datos y rangos permitidos. | Pendiente | Pendiente |
+| API-01 | La API cuenta con estructura clara de carpetas. | Separación de rutas, controladores, servicios o archivos equivalentes. | Pendiente | Pendiente |
+| API-02 | Los endpoints principales están definidos. | Rutas para crear, consultar, actualizar o eliminar información según aplique. | Pendiente | Pendiente |
+| API-03 | Las respuestas son consistentes. | Uso uniforme de códigos HTTP, mensajes y formato JSON. | Pendiente | Pendiente |
+| API-04 | Existe validación de datos de entrada. | Validación de campos obligatorios, tipos de datos y rangos permitidos. | Pendiente | Pendiente |
 | API-05 | El manejo de errores es claro. | Respuestas controladas para errores 400, 401, 404 y 500. | Pendiente | Pendiente |
-| API-06 | La API protege datos sensibles. | No expone contrasenas, tokens, credenciales ni configuraciones privadas. | Pendiente | Pendiente |
-| API-07 | La conexion a base de datos esta documentada. | Instrucciones o variables necesarias para conectar SQL o NoSQL. | Pendiente | Pendiente |
+| API-06 | La API protege datos sensibles. | No expone contraseñas, tokens, credenciales ni configuraciones privadas. | Pendiente | Pendiente |
+| API-07 | La conexión a base de datos está documentada. | Instrucciones o variables necesarias para conectar SQL o NoSQL. | Pendiente | Pendiente |
 | API-08 | La API puede desplegarse con instrucciones reproducibles. | Manual de despliegue disponible en `DeployManual`. | Pendiente | Pendiente |
-| API-09 | Se incluyen pruebas o evidencias de simulacion. | Capturas, logs, colecciones o resultados de pruebas. | Pendiente | Pendiente |
-| API-10 | La API esta preparada para integracion con WebApp/WearableApp. | Endpoints o contratos claros para consumo desde frontend. | Pendiente | Pendiente |
+| API-09 | Se incluyen pruebas o evidencias de simulación. | Capturas, logs, colecciones o resultados de pruebas. | Pendiente | Pendiente |
+| API-10 | La API está preparada para integración con WebApp/WearableApp. | Endpoints o contratos claros para consumo desde frontend. | Pendiente | Pendiente |
 
 ## Matriz de resultado
 
-| Criterio | Peso | Puntaje obtenido | Calculo | Resultado |
+| Criterio | Peso | Puntaje obtenido | Cálculo | Resultado |
 | --- | --- | --- | --- | --- |
 | Funcionalidad | 20% | Pendiente | Puntaje x 0.20 | Pendiente |
 | Confiabilidad | 15% | Pendiente | Puntaje x 0.15 | Pendiente |
 | Seguridad | 15% | Pendiente | Puntaje x 0.15 | Pendiente |
 | Rendimiento | 10% | Pendiente | Puntaje x 0.10 | Pendiente |
 | Mantenibilidad | 15% | Pendiente | Puntaje x 0.15 | Pendiente |
-| Documentacion | 15% | Pendiente | Puntaje x 0.15 | Pendiente |
-| Integracion | 10% | Pendiente | Puntaje x 0.10 | Pendiente |
+| Documentación | 15% | Pendiente | Puntaje x 0.15 | Pendiente |
+| Integración | 10% | Pendiente | Puntaje x 0.10 | Pendiente |
 | **Total** | **100%** | **Pendiente** | **Suma ponderada** | **Pendiente** |
 
 ## Evidencia solicitada
 
-Para completar la evaluacion entre pares se recomienda anexar o referenciar:
+Para completar la evaluación entre pares se recomienda anexar o referenciar:
 
-- capturas de ejecucion de endpoints;
-- coleccion de pruebas en Postman, Thunder Client o herramienta equivalente;
+- capturas de ejecución de endpoints;
+- colección de pruebas en Postman, Thunder Client o herramienta equivalente;
 - logs de respuestas correctas y errores controlados;
 - archivo de variables de entorno de ejemplo;
-- instrucciones de ejecucion local;
-- resultados de pruebas de carga o simulacion si estan disponibles;
+- instrucciones de ejecución local;
+- resultados de pruebas de carga o simulación si están disponibles;
 - comentarios del equipo evaluador.
 
-## Riesgos detectables durante la revision
+## Riesgos detectables durante la revisión
 
-| Riesgo | Impacto | Mitigacion sugerida |
+| Riesgo | Impacto | Mitigación sugerida |
 | --- | --- | --- |
-| Falta de validacion en endpoints | Puede permitir datos incompletos o incorrectos. | Agregar validadores por ruta y mensajes claros. |
+| Falta de validación en endpoints | Puede permitir datos incompletos o incorrectos. | Agregar validadores por ruta y mensajes claros. |
 | Respuestas inconsistentes | Dificulta la integracion con frontend. | Definir formato estandar para respuestas exitosas y errores. |
 | Credenciales expuestas | Compromete la seguridad del proyecto. | Usar variables de entorno y excluir archivos sensibles. |
 | Manual incompleto | Complica el despliegue por terceros. | Actualizar `DeployManual` con requisitos y pasos verificables. |
@@ -109,20 +109,20 @@ Para completar la evaluacion entre pares se recomienda anexar o referenciar:
 
 ## Formato sugerido de observaciones intergrupales
 
-| Revisor | Hallazgo | Severidad | Recomendacion | Estado |
+| Revisor | Hallazgo | Severidad | Recomendación | Estado |
 | --- | --- | --- | --- | --- |
 | Pendiente | Pendiente | Pendiente | Pendiente | Pendiente |
 
 ## Conclusiones preliminares
 
-La API cuenta con una estructura de entregables preparada para integrar codigo fuente, build y manual de despliegue. La evaluacion final dependera de la revision directa de endpoints, pruebas ejecutadas, evidencias tecnicas y documentacion disponible al momento de la entrega.
+La API cuenta con una estructura de entregables preparada para integrar código fuente, build y manual de despliegue. La evaluación final dependerá de la revisión directa de endpoints, pruebas ejecutadas, evidencias técnicas y documentación disponible al momento de la entrega.
 
 ## Equipo de desarrollo
 
 | Integrante | Rol | Observaciones |
 | --- | --- | --- |
-| Angel de Jesus Baños Tellez | Lider de desarrollo | Revisado y aprobado |
-| Francisco Garcia Garcia | Desarrollador | Revisado y aprobado |
-| Jesus Alejandro Artiaga Morales | Desarrollador | Revisado y aprobado |
+| Ángel de Jesús Baños Téllez | Líder de desarrollo | Revisado y aprobado |
+| Francisco García García | Desarrollador | Revisado y aprobado |
+| Jesús Alejandro Artiaga Morales | Desarrollador | Revisado y aprobado |
 | Al Farias Leyva | Desarrollador | Revisado y aprobado |
-| Brian Jesus Mendoza Marquez | Desarrollador | Revisado y aprobado |
+| Brian Jesús Mendoza Márquez | Desarrollador | Revisado y aprobado |

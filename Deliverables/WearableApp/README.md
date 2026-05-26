@@ -1,8 +1,8 @@
 # WearableApp
 
-En esta carpeta se organizan los entregables correspondientes a la aplicacion wearable del proyecto **PC-Hospital-MD-Quantify**. Aqui se concentra el material necesario para construir, documentar, desplegar y consultar el funcionamiento de la aplicacion destinada al dispositivo wearable.
+En esta carpeta se organizan los entregables correspondientes a la aplicación wearable del proyecto **PC-Hospital-MD-Quantify**. Aquí se concentra el material necesario para construir, documentar, desplegar y consultar el funcionamiento de la aplicación destinada al dispositivo wearable.
 
-La aplicacion wearable tiene como objetivo apoyar el monitoreo de datos relacionados con el paciente desde un dispositivo portatil, permitiendo que la informacion pueda integrarse con los demas componentes del sistema medico.
+La aplicación wearable tiene como objetivo apoyar el monitoreo de datos relacionados con el paciente desde un dispositivo portátil, permitiendo que la información pueda integrarse con los demás componentes del sistema médico.
 
 ## Estructura de Archivos
 
@@ -20,31 +20,31 @@ PC-Hospital-MD-Quantify
 
 ## Contenido de la Carpeta
 
-| Carpeta | Descripcion |
+| Carpeta | Descripción |
 | --- | --- |
-| `build` | Contiene los archivos generados o preparados para la distribucion de la aplicacion wearable. |
-| `DeployManual` | Contiene la documentacion necesaria para instalar, configurar y desplegar la aplicacion. |
-| `source` | Contiene el codigo fuente de la aplicacion, separado en componentes de backend y frontend. |
-| `UserManual` | Contiene la guia de uso dirigida al usuario final de la aplicacion wearable. |
+| `build` | Contiene los archivos generados o preparados para la distribución de la aplicación wearable. |
+| `DeployManual` | Contiene la documentación necesaria para instalar, configurar y desplegar la aplicación. |
+| `source` | Contiene el código fuente de la aplicación, separado en componentes de backend y frontend. |
+| `UserManual` | Contiene la guía de uso dirigida al usuario final de la aplicación wearable. |
 
-## Proposito
+## Propósito
 
-Esta carpeta funciona como punto central para los entregables de la WearableApp. Su organizacion permite separar claramente el codigo fuente, los archivos compilados, la documentacion tecnica de despliegue y la documentacion de uso.
+Esta carpeta funciona como punto central para los entregables de la WearableApp. Su organización permite separar claramente el código fuente, los archivos compilados, la documentación técnica de despliegue y la documentación de uso.
 
 ## Alcance
 
-- Organizar el desarrollo de la aplicacion wearable.
-- Mantener separados los componentes visuales y logicos de la aplicacion.
-- Documentar el proceso de instalacion y despliegue.
-- Documentar el uso de la aplicacion para usuarios finales.
-- Facilitar la revision academica y tecnica del modulo wearable.
+- Organizar el desarrollo de la aplicación wearable.
+- Mantener separados los componentes visuales y lógicos de la aplicación.
+- Documentar el proceso de instalación y despliegue.
+- Documentar el uso de la aplicación para usuarios finales.
+- Facilitar la revisión académica y técnica del módulo wearable.
 
 ## Equipo de Desarrollo
 
 | Colaborador | Rol | Github | Estado |
 | :--- | :--- | :--- | :--- |
-| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
-| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Revisado y Aprobado |
+| **Ángel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
+| **Francisco García G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Revisado y Aprobado |
 | **Al Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado confirmado |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Completado |
 | **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |
@@ -52,4 +52,4 @@ Esta carpeta funciona como punto central para los entregables de la WearableApp.
 
 ## Estado
 
-Documentacion inicial creada para organizar los entregables de la WearableApp. Las carpetas pueden ampliarse conforme avance el desarrollo del codigo, la generacion de builds y la elaboracion de manuales.
+Documentación inicial creada para organizar los entregables de la WearableApp. Las carpetas pueden ampliarse conforme avance el desarrollo del código, la generación de builds y la elaboración de manuales.
