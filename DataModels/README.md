@@ -30,6 +30,14 @@ Dentro de esta carpeta pueden incluirse:
 - reportes de resultados;
 - graficas, metricas y evidencia experimental.
 
+## Documentacion de modelos de datos
+
+El documento principal de modelado se encuentra en:
+
+- [`Data_Model_Documentation.md`](Data_Model_Documentation.md)
+
+Este archivo concentra la descripcion del MERE, MER, modelo relacional, diccionarios de datos SQL/NoSQL y schemas propuestos para el proyecto.
+
 ## Lineamientos de documentacion
 
 Para mantener esta seccion clara y util, se recomienda:
