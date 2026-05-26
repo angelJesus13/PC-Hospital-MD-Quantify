@@ -564,6 +564,6 @@ Completar la siguiente tabla para cada ejecución de pruebas:
 | :--- | :--- | :--- | :--- |
 | **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Completado |
 | **Francisco Garcia** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |  Revisado y Aprobado |
-| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | En revisión |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado confirmado |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En revisión |
 | **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |

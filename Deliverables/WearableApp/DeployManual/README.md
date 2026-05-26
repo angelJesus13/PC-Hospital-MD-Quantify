@@ -38,7 +38,7 @@ El proposito de esta carpeta es facilitar que cualquier integrante del equipo, d
 | :--- | :--- | :--- | :--- |
 | **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
 | **Francisco Garcia** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |  Revisado y Aprobado |
-| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Completado |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado confirmado |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revision |
 | **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |
 
