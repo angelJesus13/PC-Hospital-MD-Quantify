@@ -1,260 +1,510 @@
-# DD — Diccionario de Datos SQL
+# Diccionario de Datos SQL
 
 > **Proyecto:** PC-Hospital-MD-Quantify  
 > **Motor:** MySQL 8.0+  
 > **API de referencia:** [MEDICAL_REGISTER_API](https://github.com/AngelJdev/MEDICAL_REGISTER_API)  
-> **Versión:** 2.0.0
+> **Version:** 2.0.0
 
----
+## 1. Proposito
 
-## 1. Descripción General
+Este documento describe la persistencia relacional utilizada por
+`PC-Hospital-MD-Quantify`. Su objetivo es identificar con precision las tablas,
+columnas, tipos de datos, restricciones, relaciones e indices que aparecen en
+el repositorio.
 
-El **Diccionario de Datos (DD)** documenta de forma exhaustiva cada tabla, columna, tipo de dato, restricción y regla de negocio del subsistema SQL de `PC-Hospital-MD-Quantify`. Es la fuente de verdad para desarrolladores, analistas y DBAs.
+La solucion contiene dos esquemas SQL con responsabilidades distintas:
 
----
+| Esquema | Base de datos por defecto | Uso | Fuente principal |
+| --- | --- | --- | --- |
+| API clinica principal | `quantify_medical_db` | Persistencia transaccional consumida por la API hibrida | `Deliverables/API/source/init_db.sql` |
+| Pruebas de volumen | `hospital_hibrido_md` | Simulacion masiva de notas medicas y auditoria | `Deliverables/API/source/volume_tests/config/db_mysql.py` |
 
-## 2. Tabla: `md_usuarios`
+Las tablas de pruebas de volumen no sustituyen a las tablas `md_*` de la API.
+Se documentan por separado porque ambas familias se usan dentro del
+repositorio.
 
-**Propósito:** Gestionar los usuarios del sistema clínico con autenticación JWT y control de acceso por roles.
+## 2. Convenciones
 
-| Campo | Tipo | Nulo | PK/FK | Único | Defecto | Descripción |
-| :--- | :--- | :---: | :---: | :---: | :--- | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | ✅ | AUTO_INCREMENT | Identificador único del usuario |
-| `username` | VARCHAR(80) | ❌ | — | ✅ | — | Nombre de usuario para login. Alfanumérico, sin espacios |
-| `email` | VARCHAR(120) | ❌ | — | ✅ | — | Correo institucional. Validado con formato RFC 5322 |
-| `password_hash` | VARCHAR(200) | ❌ | — | ❌ | — | Hash bcrypt de la contraseña. Factor de costo=12 |
-| `role` | ENUM | ❌ | — | ❌ | `medico` | Rol del usuario: `admin`, `medico`, `enfermero` |
-| `activo` | BOOLEAN | ❌ | — | ❌ | `TRUE` | Soft delete. `FALSE` = cuenta desactivada sin borrar |
-| `created_at` | DATETIME | ❌ | — | ❌ | `NOW()` | Timestamp de creación (UTC) |
-| `updated_at` | DATETIME | ✅ | — | ❌ | `NULL` | Timestamp de última modificación. Auto-actualizado |
+| Marca | Significado |
+| --- | --- |
+| PK | Llave primaria |
+| FK | Llave foranea |
+| UK | Restriccion o indice unico |
+| NN | `NOT NULL` |
+| AI | `AUTO_INCREMENT` |
+| `CASCADE` | El cambio o eliminacion se propaga al registro dependiente |
+| `RESTRICT` | La eliminacion se rechaza si existen registros dependientes |
+| `SET NULL` | La referencia se conserva como `NULL` al eliminar el registro padre |
 
-**Valores ENUM `role`:**
-- `admin` — Acceso total al sistema, gestión de usuarios y reportes
-- `medico` — Acceso clínico completo (notas, diagnósticos, tratamientos)
-- `enfermero` — Registro de signos vitales y consulta de expedientes (solo lectura en notas)
+Todas las tablas del esquema principal usan `InnoDB`, `utf8mb4` y
+`utf8mb4_unicode_ci`. En MySQL, `BOOLEAN` se almacena como un alias de
+`TINYINT(1)`.
 
----
+## 3. Resumen del Esquema Principal
 
-## 3. Tabla: `md_pacientes`
+| Tabla | Proposito |
+| --- | --- |
+| `md_usuarios` | Usuarios autenticables y roles de acceso |
+| `md_pacientes` | Registro maestro de pacientes |
+| `md_notas_medicas` | Historial cronologico de notas clinicas |
+| `md_signos_vitales` | Tomas fisiologicas y puntaje MEWS |
+| `md_diagnostico` | Diagnosticos asociados con notas medicas |
+| `md_tratamientos` | Prescripciones asociadas con diagnosticos |
+| `md_nacimientos` | Informacion de nacimiento del paciente |
+| `md_defunciones` | Registro opcional de defuncion |
+| `md_documentos_oficiales` | Documentos de identidad del paciente |
+| `md_domicilios` | Catalogo de domicilios georreferenciables |
+| `md_personas_tiene_domicilio` | Relacion N:M entre pacientes y domicilios |
+| `md_valoraciones` | Resumen SQL de escalas clinicas |
 
-**Propósito:** Registro maestro de pacientes. Entidad central del sistema clínico.
+## 4. Tablas del Esquema Principal
 
-| Campo | Tipo | Nulo | PK/FK | Único | Defecto | Descripción |
-| :--- | :--- | :---: | :---: | :---: | :--- | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | ✅ | AUTO_INCREMENT | Identificador único del paciente |
-| `nombre` | VARCHAR(100) | ❌ | — | ❌ | — | Nombre completo. Formato: Apellido1 Apellido2 Nombre(s) |
-| `curp` | CHAR(18) | ❌ | — | ✅ | — | CURP oficial mexicana. Patrón: `[A-Z]{4}\d{6}[HM][A-Z]{5}[A-Z0-9]\d` |
-| `fecha_nacimiento` | DATE | ✅ | — | ❌ | `NULL` | Fecha de nacimiento. Formato: YYYY-MM-DD |
-| `sexo` | ENUM | ✅ | — | ❌ | `NULL` | `M`=Masculino, `F`=Femenino, `NB`=No binario |
-| `telefono` | VARCHAR(15) | ✅ | — | ❌ | `NULL` | Teléfono de contacto (formato internacional +52) |
-| `fecha_registro` | DATETIME | ❌ | — | ❌ | — | Fecha y hora de primer registro en el hospital |
-| `created_at` | DATETIME | ❌ | — | ❌ | `NOW()` | Timestamp de creación del registro |
+### 4.1 `md_usuarios`
 
-**Reglas de negocio:**
-- La CURP debe ser única en todo el sistema. Un intento de duplicado retorna HTTP 409.
-- Un paciente no puede eliminarse si tiene notas médicas, nacimientos o defunciones asociadas.
+Usuarios del sistema clinico. La autenticacion consulta `username`,
+`password_hash` y `activo`; la autorizacion utiliza `role`.
 
----
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador interno |
+| `username` | `VARCHAR(80)` | No | UK `idx_usuarios_username` | - | Nombre unico para iniciar sesion |
+| `email` | `VARCHAR(120)` | No | UK `idx_usuarios_email` | - | Correo unico del usuario |
+| `password_hash` | `VARCHAR(200)` | No | - | - | Hash bcrypt de la contrasena |
+| `role` | `ENUM('admin','medico','enfermero')` | No | INDEX `idx_usuarios_role` | `'medico'` | Rol de autorizacion |
+| `activo` | `BOOLEAN` | No | - | `TRUE` | Indica si la cuenta puede autenticarse |
+| `created_at` | `DATETIME` | No | - | `CURRENT_TIMESTAMP` | Fecha de creacion |
+| `updated_at` | `DATETIME` | Si | Actualizado al modificar el registro | `NULL` | Ultima modificacion |
 
-## 4. Tabla: `md_notas_medicas`
+### 4.2 `md_pacientes`
 
-**Propósito:** Registro cronológico de episodios clínicos documentados por los médicos.
+Entidad central del expediente clinico. La API valida la CURP con el patron
+oficial mexicano de 18 caracteres antes de insertar el registro.
 
-| Campo | Tipo | Nulo | PK/FK | Único | Defecto | Descripción |
-| :--- | :--- | :---: | :---: | :---: | :--- | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | ✅ | AUTO_INCREMENT | Identificador único de la nota |
-| `paciente_id` | INT UNSIGNED | ❌ | FK→`md_pacientes.id` | ❌ | — | Referencia al paciente. CASCADE al eliminar paciente |
-| `medico_id` | INT UNSIGNED | ❌ | FK→`md_usuarios.id` | ❌ | — | Médico autor. RESTRICT al eliminar usuario |
-| `contenido` | TEXT | ❌ | — | ❌ | — | Texto clínico libre de la nota médica. Sin límite de caracteres |
-| `tipo_nota` | ENUM | ❌ | — | ❌ | — | Tipo de nota clínica (ver valores abajo) |
-| `fecha` | DATETIME | ❌ | — | ❌ | — | Fecha y hora de redacción de la nota |
-| `created_at` | DATETIME | ❌ | — | ❌ | `NOW()` | Timestamp de inserción en BD |
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador interno |
+| `nombre` | `VARCHAR(100)` | No | INDEX `idx_pacientes_nombre` | - | Nombre completo |
+| `curp` | `CHAR(18)` | No | UK `idx_pacientes_curp` | - | CURP unica |
+| `fecha_nacimiento` | `DATE` | Si | - | `NULL` | Fecha de nacimiento |
+| `sexo` | `ENUM('M','F','NB')` | Si | - | `NULL` | Sexo registrado |
+| `telefono` | `VARCHAR(15)` | Si | - | `NULL` | Telefono de contacto |
+| `fecha_registro` | `DATETIME` | No | INDEX `idx_pacientes_fecha_registro` | - | Fecha de alta hospitalaria |
+| `created_at` | `DATETIME` | No | - | `CURRENT_TIMESTAMP` | Fecha de insercion |
 
-**Valores ENUM `tipo_nota`:**
-- `ingreso` — Primera evaluación clínica al admitir al paciente
-- `evolucion` — Seguimiento diario o de turno de la condición
-- `egreso` — Resumen al dar de alta al paciente
-- `interconsulta` — Nota de especialista consultado por otro médico
-- `urgencias` — Atención en servicio de urgencias
+### 4.3 `md_notas_medicas`
 
----
+Notas del historial clinico. Cada registro pertenece a un paciente y conserva
+el usuario medico que lo redacto.
 
-## 5. Tabla: `md_signos_vitales`
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador de la nota |
+| `paciente_id` | `INT UNSIGNED` | No | FK a `md_pacientes.id` | - | Paciente propietario |
+| `medico_id` | `INT UNSIGNED` | No | FK a `md_usuarios.id` | - | Usuario medico autor |
+| `contenido` | `TEXT` | No | - | - | Texto clinico |
+| `tipo_nota` | `ENUM('ingreso','evolucion','egreso','interconsulta','urgencias')` | No | INDEX `idx_notas_tipo` | - | Clasificacion de la nota |
+| `fecha` | `DATETIME` | No | INDEX compuesto con `paciente_id` | - | Fecha clinica |
+| `created_at` | `DATETIME` | No | - | `CURRENT_TIMESTAMP` | Fecha de insercion |
 
-**Propósito:** Registro de parámetros fisiológicos para monitoreo continuo y cálculo de scores de riesgo (MEWS).
+**Indices:** `idx_notas_paciente_fecha(paciente_id, fecha)` e
+`idx_notas_medico(medico_id)`.
 
-| Campo | Tipo | Nulo | PK/FK | Rango válido | Unidad | Descripción |
-| :--- | :--- | :---: | :---: | :--- | :--- | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | — | — | Identificador único |
-| `paciente_id` | INT UNSIGNED | ❌ | FK→`md_pacientes.id` | — | — | Paciente al que pertenece el registro |
-| `tension_arterial` | VARCHAR(20) | ✅ | — | — | mmHg | Formato `sistólica/diastólica`. Ej: `120/80` |
-| `frecuencia_cardiaca` | INT UNSIGNED | ✅ | — | 0–300 | lpm | Latidos por minuto |
-| `temperatura` | DECIMAL(5,2) | ✅ | — | 30.0–45.0 | °C | Temperatura corporal en Celsius |
-| `frecuencia_respiratoria` | INT UNSIGNED | ✅ | — | 0–60 | rpm | Respiraciones por minuto |
-| `saturacion_o2` | INT UNSIGNED | ✅ | — | 0–100 | % | Saturación de oxígeno en sangre (SpO2) |
-| `escala_consciencia` | VARCHAR(30) | ✅ | — | — | — | Nivel de consciencia: alerta, confuso, somnoliento, inconsciente |
-| `score_mews` | INT UNSIGNED | ❌ | — | 0–14 | pts | Score MEWS calculado automáticamente |
-| `fecha` | DATETIME | ❌ | — | — | — | Fecha y hora de la toma de signos |
+**Integridad referencial:** al eliminar un paciente se eliminan sus notas
+(`CASCADE`). Un usuario medico con notas asociadas no puede eliminarse
+(`RESTRICT`). Ambas FK propagan actualizaciones de identificador (`ON UPDATE
+CASCADE`).
 
-**Cálculo automático `score_mews`:**
+### 4.4 `md_signos_vitales`
 
-| Parámetro | Puntos críticos |
-| :--- | :--- |
-| FC < 40 o > 130 | +2 pts |
-| FR > 25 | +2 pts |
-| SpO2 < 90% | +3 pts |
-| Temperatura > 38.5 | +1 pt |
-| Nivel de consciencia alterado | +1–3 pts |
+Tomas fisiologicas asociadas con pacientes. La API calcula `score_mews` antes
+de persistir cada toma.
 
-Score ≥ 5 → Alerta crítica automática en MongoDB `valoraciones_flexibles`.
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador de la toma |
+| `paciente_id` | `INT UNSIGNED` | No | FK a `md_pacientes.id` | - | Paciente monitoreado |
+| `tension_arterial` | `VARCHAR(20)` | Si | API: patron `sistolica/diastolica` | `NULL` | Presion arterial en mmHg |
+| `frecuencia_cardiaca` | `INT UNSIGNED` | Si | CHECK `0..300` | `NULL` | Latidos por minuto |
+| `temperatura` | `DECIMAL(5,2)` | Si | CHECK `30.0..45.0` | `NULL` | Temperatura en grados Celsius |
+| `frecuencia_respiratoria` | `INT UNSIGNED` | Si | CHECK `0..60` | `NULL` | Respiraciones por minuto |
+| `saturacion_o2` | `INT UNSIGNED` | Si | CHECK `0..100` | `NULL` | Saturacion de oxigeno en porcentaje |
+| `escala_consciencia` | `VARCHAR(30)` | Si | - | `NULL` | Descripcion del estado de consciencia |
+| `score_mews` | `INT UNSIGNED` | No | INDEX `idx_sv_score_mews` | `0` | Puntaje calculado por la API |
+| `fecha` | `DATETIME` | No | INDEX compuesto con `paciente_id` | - | Fecha de la toma |
 
----
+**Indice:** `idx_sv_paciente_fecha(paciente_id, fecha DESC)`.
 
-## 6. Tabla: `md_diagnostico`
+**Integridad referencial:** `paciente_id` usa eliminacion `CASCADE`.
 
-**Propósito:** Diagnósticos médicos formales vinculados a notas clínicas, con codificación CIE-10.
+**Regla de aplicacion:** `utils/helpers.py` calcula el MEWS usando frecuencia
+cardiaca, frecuencia respiratoria, saturacion de oxigeno, temperatura y
+consciencia. Cuando el resultado es mayor o igual a `5`, la ruta de signos
+vitales registra una alerta en MongoDB. El valor no se calcula mediante un
+trigger SQL.
 
-| Campo | Tipo | Nulo | PK/FK | Único | Defecto | Descripción |
-| :--- | :--- | :---: | :---: | :---: | :--- | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | ✅ | AUTO_INCREMENT | Identificador único |
-| `nota_id` | INT UNSIGNED | ❌ | FK→`md_notas_medicas.id` | ❌ | — | Nota médica a la que pertenece el diagnóstico. CASCADE |
-| `descripcion` | TEXT | ❌ | — | ❌ | — | Descripción clínica detallada del diagnóstico |
-| `codigo_cie` | CHAR(7) | ✅ | — | ❌ | `NULL` | Código CIE-10. Patrón: `^[A-Z][0-9]{2}(\.[0-9]{1,2})?$` |
-| `severidad` | ENUM | ❌ | — | ❌ | `leve` | Gravedad: `leve`, `moderado`, `grave`, `critico` |
-| `activo` | BOOLEAN | ❌ | — | ❌ | `TRUE` | Soft delete. `FALSE` = diagnóstico resuelto o descartado |
+### 4.5 `md_diagnostico`
 
-**Ejemplos de códigos CIE-10:**
-- `J18.9` — Neumonía no especificada
-- `I10` — Hipertensión esencial
-- `E11.9` — Diabetes mellitus tipo 2 sin complicaciones
-- `K29.7` — Gastritis no especificada
-- `S06.0` — Conmoción cerebral (TEC)
+Diagnosticos medicos asociados con una nota clinica.
 
----
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador del diagnostico |
+| `nota_id` | `INT UNSIGNED` | No | FK a `md_notas_medicas.id` | - | Nota que origina el diagnostico |
+| `descripcion` | `TEXT` | No | - | - | Descripcion clinica |
+| `codigo_cie` | `CHAR(7)` | Si | INDEX `idx_dx_codigo_cie` | `NULL` | Codigo CIE-10 |
+| `severidad` | `ENUM('leve','moderado','grave','critico')` | No | INDEX `idx_dx_severidad` | `'leve'` | Nivel de gravedad |
+| `activo` | `BOOLEAN` | No | - | `TRUE` | Estado vigente del diagnostico |
 
-## 7. Tabla: `md_tratamientos`
+**Indice:** `idx_dx_nota(nota_id)`.
 
-**Propósito:** Prescripciones médicas asociadas a un diagnóstico específico.
+**Integridad referencial:** `nota_id` usa eliminacion `CASCADE`.
 
-| Campo | Tipo | Nulo | PK/FK | Defecto | Descripción |
-| :--- | :--- | :---: | :---: | :--- | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | AUTO_INCREMENT | Identificador único |
-| `diagnostico_id` | INT UNSIGNED | ❌ | FK→`md_diagnostico.id` | — | Diagnóstico que origina la prescripción. CASCADE |
-| `medicamento` | VARCHAR(200) | ❌ | — | — | Nombre completo del medicamento (DCI preferido) |
-| `dosis` | VARCHAR(50) | ❌ | — | — | Dosis por toma. Ej: `500 mg`, `10 UI` |
-| `frecuencia` | VARCHAR(50) | ❌ | — | — | Intervalo entre dosis. Ej: `cada 8 horas`, `dos veces al día` |
-| `duracion` | VARCHAR(30) | ❌ | — | — | Duración del tratamiento. Ej: `7 días`, `hasta nuevo aviso` |
-| `activo` | BOOLEAN | ❌ | — | `TRUE` | `FALSE` = tratamiento concluido o suspendido |
-| `fecha_inicio` | DATETIME | ✅ | — | `NULL` | Inicio del tratamiento |
-| `fecha_fin` | DATETIME | ✅ | — | `NULL` | Calculado como `fecha_inicio + duracion` |
+**Regla de aplicacion:** el esquema Pydantic valida `codigo_cie` con el patron
+`^[A-Z][0-9]{2}(\.[0-9]{1,2})?$`.
 
----
+### 4.6 `md_tratamientos`
 
-## 8. Tabla: `md_nacimientos`
+Prescripciones vinculadas con un diagnostico.
 
-**Propósito:** Datos del nacimiento de un paciente (relación 1:1 con `md_pacientes`).
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador del tratamiento |
+| `diagnostico_id` | `INT UNSIGNED` | No | FK a `md_diagnostico.id` | - | Diagnostico relacionado |
+| `medicamento` | `VARCHAR(200)` | No | INDEX `idx_tx_medicamento` | - | Nombre del medicamento |
+| `dosis` | `VARCHAR(50)` | No | - | - | Dosis indicada |
+| `frecuencia` | `VARCHAR(50)` | No | - | - | Periodicidad |
+| `duracion` | `VARCHAR(30)` | No | - | - | Duracion expresada como texto |
+| `activo` | `BOOLEAN` | No | INDEX `idx_tx_activo` | `TRUE` | Estado del tratamiento |
+| `fecha_inicio` | `DATETIME` | Si | - | `NULL` | Inicio opcional |
+| `fecha_fin` | `DATETIME` | Si | - | `NULL` | Fin opcional |
 
-| Campo | Tipo | Nulo | PK/FK | Descripción |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | Identificador único |
-| `paciente_id` | INT UNSIGNED | ❌ | FK UNIQUE | Paciente. RESTRICT al eliminar. Un paciente → un nacimiento |
-| `fecha_nacimiento` | DATE | ❌ | — | Fecha de nacimiento (YYYY-MM-DD) |
-| `lugar` | VARCHAR(200) | ❌ | — | Hospital, ciudad o estado de nacimiento |
-| `nombre_madre` | VARCHAR(100) | ✅ | — | Nombre completo de la madre |
-| `nombre_padre` | VARCHAR(100) | ✅ | — | Nombre completo del padre |
-| `peso_al_nacer` | DECIMAL(5,2) | ✅ | — | Peso en kg. Ej: `3.25` |
-| `talla_al_nacer` | DECIMAL(5,2) | ✅ | — | Talla en cm. Ej: `50.00` |
+**Indice:** `idx_tx_diagnostico(diagnostico_id)`.
 
----
+**Integridad referencial:** `diagnostico_id` usa eliminacion `CASCADE`.
 
-## 9. Tabla: `md_defunciones`
+### 4.7 `md_nacimientos`
 
-**Propósito:** Registro de defunciones hospitalarias (relación 1:0..1 con `md_pacientes`).
+Registro opcional y unico de nacimiento para un paciente.
 
-| Campo | Tipo | Nulo | PK/FK | Descripción |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | Identificador único |
-| `paciente_id` | INT UNSIGNED | ❌ | FK UNIQUE | Paciente fallecido. RESTRICT al eliminar |
-| `fecha_defuncion` | DATETIME | ❌ | — | Fecha y hora del deceso (UTC) |
-| `causa` | TEXT | ❌ | — | Causa inmediata de muerte (ej: insuficiencia cardíaca aguda) |
-| `causa_basica` | TEXT | ✅ | — | Enfermedad o condición subyacente que originó la causa inmediata |
-| `certificador` | VARCHAR(50) | ✅ | — | Nombre del médico que certifica la defunción |
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador del registro |
+| `paciente_id` | `INT UNSIGNED` | No | FK a `md_pacientes.id`, UK `idx_nac_paciente` | - | Paciente relacionado |
+| `fecha_nacimiento` | `DATE` | No | - | - | Fecha de nacimiento |
+| `lugar` | `VARCHAR(200)` | No | - | - | Lugar de nacimiento |
+| `nombre_madre` | `VARCHAR(100)` | Si | - | `NULL` | Nombre de la madre |
+| `nombre_padre` | `VARCHAR(100)` | Si | - | `NULL` | Nombre del padre |
+| `peso_al_nacer` | `DECIMAL(5,2)` | Si | - | `NULL` | Peso en kilogramos |
+| `talla_al_nacer` | `DECIMAL(5,2)` | Si | - | `NULL` | Talla en centimetros |
 
----
+**Integridad referencial:** `paciente_id` usa eliminacion `RESTRICT`.
 
-## 10. Tabla: `md_documentos_oficiales`
+### 4.8 `md_defunciones`
 
-**Propósito:** Documentos de identidad y derechohabiencia vinculados a un paciente.
+Registro opcional y unico de defuncion para un paciente.
 
-| Campo | Tipo | Nulo | PK/FK | Descripción |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | Identificador único |
-| `paciente_id` | INT UNSIGNED | ❌ | FK→`md_pacientes.id` | Paciente propietario del documento. CASCADE |
-| `tipo_documento` | ENUM | ❌ | — | `ine`, `curp`, `nss`, `pasaporte`, `acta_nacimiento` |
-| `numero_documento` | VARCHAR(60) | ❌ | — | Número o folio único del documento |
-| `fecha_emision` | DATE | ✅ | — | Fecha de emisión del documento |
-| `fecha_vencimiento` | DATE | ✅ | — | Fecha de vencimiento (si aplica) |
-| `vigente` | BOOLEAN | ❌ | — | `TRUE` = documento válido y vigente |
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador del registro |
+| `paciente_id` | `INT UNSIGNED` | No | FK a `md_pacientes.id`, UK `idx_def_paciente` | - | Paciente relacionado |
+| `fecha_defuncion` | `DATETIME` | No | INDEX `idx_def_fecha` | - | Fecha y hora de defuncion |
+| `causa` | `TEXT` | No | - | - | Causa inmediata |
+| `causa_basica` | `TEXT` | Si | - | `NULL` | Causa subyacente |
+| `certificador` | `VARCHAR(50)` | Si | - | `NULL` | Nombre del certificador |
 
----
+**Integridad referencial:** `paciente_id` usa eliminacion `RESTRICT`.
 
-## 11. Tabla: `md_domicilios`
+### 4.9 `md_documentos_oficiales`
 
-**Propósito:** Catálogo de domicilios con coordenadas GPS para análisis epidemiológico geoespacial.
+Documentos de identidad vinculados con pacientes.
 
-| Campo | Tipo | Nulo | PK/FK | Descripción |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | Identificador único |
-| `calle` | VARCHAR(200) | ❌ | — | Nombre de calle y número exterior/interior |
-| `colonia` | VARCHAR(100) | ❌ | — | Colonia o fraccionamiento |
-| `municipio` | VARCHAR(100) | ❌ | — | Municipio o alcaldía |
-| `estado` | VARCHAR(60) | ❌ | — | Estado de la República Mexicana |
-| `cp` | CHAR(5) | ❌ | — | Código Postal de 5 dígitos |
-| `latitud` | DECIMAL(10,7) | ✅ | — | Latitud GPS. Rango: -90.0 a 90.0 |
-| `longitud` | DECIMAL(10,7) | ✅ | — | Longitud GPS. Rango: -180.0 a 180.0 |
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador del documento |
+| `paciente_id` | `INT UNSIGNED` | No | FK a `md_pacientes.id` | - | Paciente propietario |
+| `tipo_documento` | `ENUM('ine','curp','nss','pasaporte','acta_nacimiento')` | No | INDEX `idx_docs_tipo` | - | Tipo de documento |
+| `numero_documento` | `VARCHAR(60)` | No | UK compuesto con `tipo_documento` | - | Folio o numero |
+| `fecha_emision` | `DATE` | Si | - | `NULL` | Fecha de emision |
+| `fecha_vencimiento` | `DATE` | Si | - | `NULL` | Fecha de vencimiento |
+| `vigente` | `BOOLEAN` | No | - | `TRUE` | Vigencia declarada |
 
----
+**Indices:** `idx_docs_paciente(paciente_id)` e
+`idx_docs_numero(tipo_documento, numero_documento)`.
 
-## 12. Tabla: `md_personas_tiene_domicilio`
+**Integridad referencial:** `paciente_id` usa eliminacion `CASCADE`.
 
-**Propósito:** Tabla intermedia para la relación N:M entre pacientes y domicilios.
+### 4.10 `md_domicilios`
 
-| Campo | Tipo | Nulo | PK/FK | Descripción |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | Identificador único |
-| `paciente_id` | INT UNSIGNED | ❌ | FK→`md_pacientes.id` | Paciente. CASCADE |
-| `domicilio_id` | INT UNSIGNED | ❌ | FK→`md_domicilios.id` | Domicilio. CASCADE |
-| `tipo_domicilio` | ENUM | ❌ | — | `principal`, `temporal`, `referencia` |
-| `activo` | BOOLEAN | ❌ | — | `TRUE` = vinculación activa |
+Catalogo de domicilios con coordenadas opcionales.
 
-**Restricción única:** `(paciente_id, domicilio_id, tipo_domicilio)` — Un paciente no puede tener dos domicilios del mismo tipo activos simultáneamente.
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador del domicilio |
+| `calle` | `VARCHAR(200)` | No | - | - | Calle y numero |
+| `colonia` | `VARCHAR(100)` | No | - | - | Colonia |
+| `municipio` | `VARCHAR(100)` | No | INDEX `idx_dom_municipio` | - | Municipio o alcaldia |
+| `estado` | `VARCHAR(60)` | No | INDEX `idx_dom_estado` | - | Entidad federativa |
+| `cp` | `CHAR(5)` | No | INDEX `idx_dom_cp` | - | Codigo postal |
+| `latitud` | `DECIMAL(10,7)` | Si | API: rango `-90..90` | `NULL` | Coordenada geografica |
+| `longitud` | `DECIMAL(10,7)` | Si | API: rango `-180..180` | `NULL` | Coordenada geografica |
 
----
+### 4.11 `md_personas_tiene_domicilio`
 
-## 13. Tabla: `md_valoraciones`
+Tabla intermedia que implementa la relacion N:M entre pacientes y domicilios.
 
-**Propósito:** Registro de resultados de escalas clínicas estandarizadas (resumen SQL; detalle en MongoDB).
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador del vinculo |
+| `paciente_id` | `INT UNSIGNED` | No | FK a `md_pacientes.id` | - | Paciente |
+| `domicilio_id` | `INT UNSIGNED` | No | FK a `md_domicilios.id` | - | Domicilio |
+| `tipo_domicilio` | `ENUM('principal','temporal','referencia')` | No | UK compuesto | `'principal'` | Clasificacion del vinculo |
+| `activo` | `BOOLEAN` | No | - | `TRUE` | Estado del vinculo |
 
-| Campo | Tipo | Nulo | PK/FK | Descripción |
-| :--- | :--- | :---: | :---: | :--- |
-| `id` | INT UNSIGNED | ❌ | PK | Identificador único |
-| `paciente_id` | INT UNSIGNED | ❌ | FK→`md_pacientes.id` | Paciente evaluado. CASCADE |
-| `escala` | VARCHAR(50) | ❌ | — | Nombre de la escala: `Glasgow`, `MEWS`, `APGAR`, `Braden`, `Norton`, `SOFA` |
-| `resultado` | VARCHAR(10) | ✅ | — | Puntaje total o clasificación (ej: `8`, `GRAVE`, `7/10`) |
-| `observaciones` | TEXT | ✅ | — | Notas adicionales del evaluador |
-| `fecha` | DATETIME | ❌ | — | Fecha y hora de la valoración |
-| `registrado_por` | INT UNSIGNED | ✅ | FK→`md_usuarios.id` | Usuario que registró la valoración. SET NULL si se elimina |
+**Indices:** `idx_ptd_unique(paciente_id, domicilio_id, tipo_domicilio)`,
+`idx_ptd_paciente(paciente_id)` e `idx_ptd_domicilio(domicilio_id)`.
 
-**Escalas y rangos de interpretación:**
+**Integridad referencial:** ambas FK usan eliminacion `CASCADE`.
 
-| Escala | Rango | Interpretación |
-| :--- | :--- | :--- |
-| Glasgow | 3–15 | ≤8=Grave, 9–12=Moderado, 13–15=Leve |
-| MEWS | 0–14 | 0–4=Bajo, 5–6=Medio, ≥7=Alto |
-| APGAR | 0–10 | ≤3=Crítico, 4–6=Regular, 7–10=Normal |
-| Braden | 6–23 | ≤9=Muy alto riesgo, 10–12=Alto, 13–14=Moderado |
+### 4.12 `md_valoraciones`
 
----
+Resumen relacional de escalas clinicas. Los componentes flexibles se guardan
+en la coleccion MongoDB `valoraciones_flexibles`.
+
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `id` | `INT UNSIGNED` | No | PK, AI | - | Identificador de la valoracion |
+| `paciente_id` | `INT UNSIGNED` | No | FK a `md_pacientes.id` | - | Paciente evaluado |
+| `escala` | `VARCHAR(50)` | No | CHECK de catalogo | - | Nombre de la escala |
+| `resultado` | `VARCHAR(10)` | Si | - | `NULL` | Puntaje o clasificacion |
+| `observaciones` | `TEXT` | Si | - | `NULL` | Comentarios |
+| `fecha` | `DATETIME` | No | INDEX compuesto con `paciente_id` | - | Fecha de valoracion |
+| `registrado_por` | `INT UNSIGNED` | Si | FK a `md_usuarios.id` | `NULL` | Usuario que registro la escala |
+
+**Catalogo de escalas:** `Glasgow`, `MEWS`, `APGAR`, `Braden`, `Norton` y
+`SOFA`.
+
+**Indices:** `idx_val_paciente_fecha(paciente_id, fecha DESC)` e
+`idx_val_escala(escala)`.
+
+**Integridad referencial:** `paciente_id` usa eliminacion `CASCADE` y
+`registrado_por` usa `SET NULL`.
+
+## 5. Relaciones del Esquema Principal
+
+| Tabla origen | Cardinalidad | Tabla destino | Llave foranea | Eliminacion |
+| --- | --- | --- | --- | --- |
+| `md_usuarios` | 1:N | `md_notas_medicas` | `medico_id` | `RESTRICT` |
+| `md_usuarios` | 1:N | `md_valoraciones` | `registrado_por` | `SET NULL` |
+| `md_pacientes` | 1:N | `md_notas_medicas` | `paciente_id` | `CASCADE` |
+| `md_pacientes` | 1:N | `md_signos_vitales` | `paciente_id` | `CASCADE` |
+| `md_pacientes` | 1:N | `md_documentos_oficiales` | `paciente_id` | `CASCADE` |
+| `md_pacientes` | 1:N | `md_valoraciones` | `paciente_id` | `CASCADE` |
+| `md_pacientes` | 1:0..1 | `md_nacimientos` | `paciente_id` | `RESTRICT` |
+| `md_pacientes` | 1:0..1 | `md_defunciones` | `paciente_id` | `RESTRICT` |
+| `md_pacientes` | N:M | `md_domicilios` | Via `md_personas_tiene_domicilio` | `CASCADE` |
+| `md_notas_medicas` | 1:N | `md_diagnostico` | `nota_id` | `CASCADE` |
+| `md_diagnostico` | 1:N | `md_tratamientos` | `diagnostico_id` | `CASCADE` |
+
+## 6. Tablas para Pruebas de Volumen
+
+Estas tablas son creadas por
+`Deliverables/API/source/volume_tests/config/db_mysql.py`. Su base de datos por
+defecto es `hospital_hibrido_md`, configurable mediante `MYSQL_DB`.
+
+### 6.1 `tbb_md_pacientes`
+
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `ID` | `INT UNSIGNED` | No | PK, AI | - | Identificador |
+| `status_medico` | `VARCHAR(150)` | Si | - | `NULL` | Resumen clinico |
+| `status_vida` | `ENUM('Vivo','Finado','Coma','Vegetativo','Desconocido')` | No | - | `'Desconocido'` | Estado vital |
+| `fecha_ultima_citamedica` | `DATETIME` | Si | - | `NULL` | Ultima cita |
+| `fecha_registro` | `DATETIME` | No | - | `CURRENT_TIMESTAMP` | Alta |
+| `fecha_actualizacion` | `DATETIME` | Si | - | `NULL` | Modificacion |
+| `estatus` | `BIT(1)` | No | - | `b'1'` | Estado logico |
+
+### 6.2 `tbb_hr_personal_medico`
+
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `ID` | `INT UNSIGNED` | No | PK, AI | - | Identificador |
+| `Turno` | `ENUM('MATUTINO','VESPERTINO','NOCTURNO A','NOCTURNO B','JORNADA ACUMULADA')` | Si | - | `NULL` | Turno laboral |
+| `Area_ID` | `INT UNSIGNED` | No | Referencia simulada sin FK | - | Area clinica |
+| `Fecha_Registro` | `DATETIME` | No | - | `CURRENT_TIMESTAMP` | Alta |
+| `Fecha_Actualizacion` | `DATETIME` | Si | - | `NULL` | Modificacion |
+| `Estatus` | `BIT(1)` | No | - | `b'1'` | Estado logico |
+| `Cedula_Profesional` | `VARCHAR(30)` | No | UK | - | Cedula profesional |
+| `Especialidad` | `VARCHAR(100)` | No | - | - | Especialidad |
+
+### 6.3 `tbb_md_expedientes_medicos`
+
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `ID` | `INT UNSIGNED` | No | PK, AI | - | Identificador |
+| `numero_expediente` | `VARCHAR(50)` | No | UK | - | Folio del expediente |
+| `Paciente_ID` | `INT UNSIGNED` | No | FK a `tbb_md_pacientes.ID`, UK | - | Paciente |
+| `Medico_ID_Apertura` | `INT UNSIGNED` | No | FK a `tbb_hr_personal_medico.ID` | - | Medico que abre el expediente |
+| `Seguro_Proveedor_ID` | `INT UNSIGNED` | Si | Referencia simulada sin FK | `NULL` | Proveedor de seguro |
+| `fecha_apertura` | `DATETIME` | No | - | `CURRENT_TIMESTAMP` | Apertura |
+| `estatus_expediente` | `ENUM('Activo','Inactivo','Archivo Muerto','Retenido Legalmente')` | Si | - | `'Activo'` | Estado |
+| `nivel_confidencialidad` | `ENUM('Normal','Restringido','Estricto')` | Si | - | `'Normal'` | Nivel de acceso |
+| `antecedentes_historial_clinico` | `TEXT` | Si | - | `NULL` | Antecedentes fusionados |
+| `evaluacion_inicial_ingreso` | `TEXT` | Si | - | `NULL` | Evaluacion de ingreso |
+| `tiene_consentimiento_informado` | `BIT(1)` | No | - | `b'0'` | Consentimiento |
+| `detalles_seguro_poliza` | `VARCHAR(200)` | Si | - | `NULL` | Resumen de poliza |
+| `alertas_medicas_criticas` | `VARCHAR(255)` | Si | - | `NULL` | Alertas del expediente |
+
+`Paciente_ID` usa eliminacion `RESTRICT`. `Medico_ID_Apertura` conserva el
+comportamiento restrictivo por defecto de MySQL.
+
+### 6.4 `tbb_md_notas_medicas`
+
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `ID` | `INT UNSIGNED` | No | PK, AI | - | Identificador |
+| `FechaRegistro` | `DATETIME` | No | - | `CURRENT_TIMESTAMP` | Fecha de generacion |
+| `Estatus` | `BIT(1)` | No | - | `b'1'` | Estado logico |
+| `TipoNota` | `VARCHAR(50)` | No | - | - | Tipo solicitado en la prueba |
+| `AntecedentesRelevantes` | `TEXT` | Si | - | `NULL` | Antecedentes generados |
+| `SintomasActuales` | `TEXT` | No | - | - | Sintomas generados |
+| `InterrogatorioAnamnesis` | `TEXT` | No | - | - | Interrogatorio generado |
+| `SignosVitales` | `ENUM(...)` | No | Catalogo de seis textos predefinidos | `'No recabados'` | Resumen de signos |
+| `Auditoria` | `VARCHAR(255)` | No | - | `'Sistema'` | Resultado de auditoria clinica |
+| `Paciente_ID` | `INT UNSIGNED` | No | FK a `tbb_md_pacientes.ID` | - | Paciente |
+| `Medico_ID` | `INT UNSIGNED` | No | FK a `tbb_hr_personal_medico.ID` | - | Medico |
+| `Expediente_ID` | `INT UNSIGNED` | No | FK a `tbb_md_expedientes_medicos.ID` | - | Expediente |
+
+### 6.5 `tbi_bitacora`
+
+Bitacora resumida de operaciones de las pruebas SQL.
+
+| Campo | Tipo | Nulo | Llave o regla | Defecto | Descripcion |
+| --- | --- | --- | --- | --- | --- |
+| `ID` | `INT UNSIGNED` | No | PK, AI | - | Identificador |
+| `usuario` | `VARCHAR(100)` | No | - | - | Usuario o IP solicitante |
+| `NombreTabla` | `VARCHAR(100)` | No | - | - | Tabla afectada |
+| `Operacion` | `VARCHAR(50)` | No | - | - | Tipo de operacion |
+| `Descripcion` | `TEXT` | Si | - | `NULL` | Resumen |
+| `fechaHora` | `DATETIME` | No | - | `CURRENT_TIMESTAMP` | Fecha del evento |
+
+## 7. Rutinas SQL para Simulacion
+
+Las rutinas ubicadas en `DataBases/SQL/Functions` y
+`DataBases/SQL/StoredProcedures` generan informacion sintetica para poblar
+`tbb_md_notas_medicas`.
+
+| Rutina | Tipo | Parametros | Retorno o efecto |
+| --- | --- | --- | --- |
+| `fn_generar_antecedentes` | Funcion | `p_es_paciente_zero BOOLEAN` | Antecedentes clinicos sinteticos o `NULL` |
+| `fn_generar_auditoria` | Funcion | `p_usuario_ip VARCHAR(100)` | Texto de auditoria clinica |
+| `fn_generar_interrogatorio` | Funcion | `p_es_paciente_zero BOOLEAN`, `p_genero VARCHAR(15)`, `p_edad INT` | Interrogatorio sintetico |
+| `fn_generar_signos_vitales` | Funcion | `p_es_paciente_zero BOOLEAN`, `p_escenario VARCHAR(30)` | Resumen de signos vitales |
+| `fn_generar_sintomas` | Funcion | `p_es_paciente_zero BOOLEAN` | Sintomas sinteticos |
+| `fn_generar_tipo_nota` | Funcion | Sin parametros | Tipo de nota aleatorio |
+| `sp_poblar_notas_dinamico` | Procedimiento | Cantidad, tipos de nota, banderas de pediatria, UCI y paciente zero, usuario o IP | Inserta notas masivas y un resumen en `tbi_bitacora` |
+
+## 8. Observaciones de Mantenimiento
+
+- La fuente de verdad del esquema principal es
+  `Deliverables/API/source/init_db.sql`, alineada con
+  `Deliverables/API/source/models.py`.
+- Las validaciones declaradas solo en Pydantic se identifican como reglas de
+  aplicacion; no deben confundirse con restricciones DDL.
+- `md_signos_vitales.score_mews` se calcula en la API, no mediante un trigger.
+- `md_tratamientos.fecha_fin` es un dato opcional persistido; el DDL no incluye
+  una columna calculada.
+- `Seguro_Proveedor_ID` y `Area_ID` del esquema de volumen son referencias
+  simuladas sin FK declarada.
+- El diccionario NoSQL se mantiene por separado en
+  `DataBases/NoSQL/DD/README.md`.
+
+## 9. Catalogos y Reglas de Negocio
+
+### 9.1 Roles de usuario
+
+| Valor | Descripcion |
+| --- | --- |
+| `admin` | Administracion de usuarios y acceso completo al sistema |
+| `medico` | Operacion clinica sobre notas, diagnosticos y tratamientos |
+| `enfermero` | Registro de signos vitales y consulta de informacion clinica |
+
+### 9.2 Tipos de nota medica
+
+| Valor | Descripcion |
+| --- | --- |
+| `ingreso` | Evaluacion inicial al admitir al paciente |
+| `evolucion` | Seguimiento de la condicion clinica |
+| `egreso` | Resumen generado al dar de alta al paciente |
+| `interconsulta` | Valoracion solicitada a otro especialista |
+| `urgencias` | Atencion proporcionada por el servicio de urgencias |
+
+### 9.3 Calculo MEWS
+
+El puntaje `md_signos_vitales.score_mews` se calcula en la API antes de
+insertar la toma. Los umbrales implementados en `utils/helpers.py` son:
+
+| Parametro | Condicion | Puntos |
+| --- | --- | --- |
+| Frecuencia cardiaca | `< 40` o `> 130` lpm | `+2` |
+| Frecuencia cardiaca | `< 50` o `> 110` lpm | `+1` |
+| Frecuencia respiratoria | `< 9` o `> 30` rpm | `+3` |
+| Frecuencia respiratoria | `> 20` rpm | `+1` |
+| Saturacion de oxigeno | `< 85%` | `+3` |
+| Saturacion de oxigeno | `< 90%` | `+2` |
+| Saturacion de oxigeno | `< 95%` | `+1` |
+| Temperatura | `< 35.0` o `> 39.0` grados Celsius | `+2` |
+| Temperatura | `< 36.0` o `> 38.5` grados Celsius | `+1` |
+| Consciencia | Contiene `inconsciente` o `coma` | `+3` |
+| Consciencia | Contiene `confuso` o `somnoliento` | `+2` |
+| Consciencia | Contiene `desorientado` | `+1` |
+
+| Puntaje total | Clasificacion API |
+| --- | --- |
+| `0..4` | `NORMAL` |
+| `5..6` | `MODERADO` |
+| `>= 7` | `CRITICO` |
+
+Un puntaje mayor o igual a `5` genera una alerta en la coleccion MongoDB
+`valoraciones_flexibles`.
+
+### 9.4 Codigos CIE-10
+
+La API valida `md_diagnostico.codigo_cie` antes de insertar el diagnostico.
+Ejemplos de valores compatibles con el patron configurado:
+
+| Codigo | Ejemplo de diagnostico |
+| --- | --- |
+| `J18.9` | Neumonia no especificada |
+| `I10` | Hipertension esencial |
+| `E11.9` | Diabetes mellitus tipo 2 sin complicaciones |
+| `K29.7` | Gastritis no especificada |
+| `S06.0` | Conmocion cerebral |
+
+### 9.5 Escalas clinicas
+
+`md_valoraciones.escala` admite `Glasgow`, `MEWS`, `APGAR`, `Braden`,
+`Norton` y `SOFA`. La API incluye una clasificacion auxiliar para Glasgow:
+
+| Escala Glasgow | Clasificacion |
+| --- | --- |
+| `13..15` | Leve |
+| `9..12` | Moderado |
+| `< 9` | Grave |
+
+Las interpretaciones detalladas del resto de las escalas deben mantenerse en
+la capa clinica correspondiente. El DDL solo restringe el catalogo de nombres.
+
+## 10. Archivos de Referencia
+
+| Archivo | Contenido |
+| --- | --- |
+| `Deliverables/API/source/init_db.sql` | DDL del esquema principal |
+| `Deliverables/API/source/models.py` | Modelos ORM SQLAlchemy |
+| `Deliverables/API/source/schemas.py` | Validaciones de entrada y salida |
+| `Deliverables/API/source/utils/helpers.py` | Calculo MEWS |
+| `Deliverables/API/source/volume_tests/config/db_mysql.py` | DDL y semilla del esquema de volumen |
+| `DataBases/SQL/Functions/*.sql` | Funciones para datos sinteticos |
+| `DataBases/SQL/StoredProcedures/sp_poblar_notas_dinamico.sql` | Insercion masiva de notas |
 
 ## Equipo de Desarrollo
 
@@ -264,54 +514,3 @@ Score ≥ 5 → Alerta crítica automática en MongoDB `valoraciones_flexibles`.
 | **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Revisado y Aprobado |
 | **Al Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado confirmado |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Completado |
-
----
-
-## Anexo: aporte complementario de Jesus-docs-calidad-modelos
-
-# DD - Diccionario de Datos SQL
-
-## Descripcion general
-
-Esta carpeta contiene el diccionario de datos para la base SQL del proyecto **PC-Hospital-MD-Quantify**. El diccionario describe tablas, campos, tipos de datos, restricciones y significado de cada elemento.
-
-## Tablas documentadas
-
-| Tabla | Descripcion |
-| --- | --- |
-| `roles` | Catalogo de perfiles y permisos. |
-| `usuarios` | Datos generales y credenciales de acceso. |
-| `pacientes` | Datos clinicos o personales basicos del paciente. |
-| `profesionales_salud` | Informacion del personal encargado de revisar pacientes. |
-| `paciente_profesional` | Relacion entre pacientes y profesionales. |
-| `dispositivos_wearable` | Dispositivos asociados al monitoreo. |
-| `mediciones_biometricas` | Mediciones generadas por dispositivos. |
-| `logs_actividad` | Registros de actividad o disciplina. |
-| `alertas` | Alertas generadas por eventos relevantes. |
-| `sesiones` | Sesiones iniciadas por usuarios. |
-
-## Campos criticos
-
-| Campo | Tabla | Tipo sugerido | Reglas |
-| --- | --- | --- | --- |
-| `id_usuario` | `usuarios` | INT | PK, autoincremental. |
-| `correo` | `usuarios` | VARCHAR(120) | Unico, obligatorio. |
-| `password_hash` | `usuarios` | VARCHAR(255) | Obligatorio, no debe guardar texto plano. |
-| `id_paciente` | `pacientes` | INT | PK, relacionado con usuario. |
-| `id_dispositivo` | `dispositivos_wearable` | INT | PK, relacionado con paciente. |
-| `tipo_medicion` | `mediciones_biometricas` | VARCHAR(60) | Obligatorio. |
-| `valor` | `mediciones_biometricas` | DECIMAL(10,2) | Obligatorio. |
-| `fecha_registro` | `mediciones_biometricas` | DATETIME | Obligatorio. |
-| `severidad` | `alertas` | VARCHAR(20) | baja, media, alta o critica. |
-| `estado` | `alertas` | VARCHAR(20) | nueva, revisada o cerrada. |
-
-## Recomendaciones
-
-- Mantener nombres de campos en minusculas y con guion bajo.
-- Documentar cualquier cambio de tipo de dato.
-- Agregar restricciones `NOT NULL` donde el negocio lo requiera.
-- Usar indices en campos de busqueda frecuente como correo, paciente y fecha.
-
-## Estado
-
-Diccionario base preparado para ampliarse con scripts SQL o tablas finales.
