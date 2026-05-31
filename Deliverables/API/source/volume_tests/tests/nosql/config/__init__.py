@@ -1,0 +1,6 @@
+from tests.nosql.config.fn_generar_antecedentes import fn_generar_antecedentes
+from tests.nosql.config.fn_generar_auditoria import fn_generar_auditoria
+from tests.nosql.config.fn_generar_interrogatorio import fn_generar_interrogatorio
+from tests.nosql.config.fn_generar_signos_vitales import fn_generar_signos_vitales
+from tests.nosql.config.fn_generar_sintomas import fn_generar_sintomas
+from tests.nosql.config.fn_generar_tipo_nota import fn_generar_tipo_nota
