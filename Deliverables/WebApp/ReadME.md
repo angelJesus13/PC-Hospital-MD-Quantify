@@ -177,8 +177,8 @@ Gracias a su estructura modular, el proyecto mantiene una organización clara y 
 | :--- | :--- | :--- | :--- |
 | **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
 | **Francisco Garcia** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Revisado y Aprobado |
-| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | En Revisión |
-| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | En Revisión |
+| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Aprobado |
 | **Brian Jesús Mendoza Márquez** | Software Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Completado |
 
 ---
