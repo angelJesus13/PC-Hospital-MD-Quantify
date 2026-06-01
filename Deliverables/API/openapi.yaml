@@ -1,0 +1,117 @@
+openapi: 3.0.3
+info:
+  title: PC-Hospital-MD REST API
+  description: API Híbrida para la gestión de expedientes clínicos e ingesta masiva de datos biométricos de wearables. Documentación que previene ataques comunes (OWASP Top 10).
+  version: 1.1.0
+  contact:
+    name: Equipo Quantify
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Development Server
+paths:
+  /auth/login:
+    post:
+      summary: Autenticación de Médico o Administrador
+      description: Endpoint seguro contra inyecciones SQL que valida credenciales y retorna un JWT firmado (RS256).
+      tags:
+        - Autenticación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: OK. Credenciales válidas.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Unauthorized. Credenciales incorrectas.
+        '422':
+          description: Unprocessable Entity. Validación de formato fallida (Prevención XSS).
+        '500':
+          description: Internal Server Error.
+
+  /wearables/ingest:
+    post:
+      summary: Ingesta asíncrona de datos biométricos
+      description: Recibe payload desde dispositivo. Inserta en MongoDB (alta frecuencia) y evalúa disparador de alertas SQL.
+      tags:
+        - Biometría NoSQL
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BiometricPayload'
+      responses:
+        '201':
+          description: Created. Documento insertado en MongoDB.
+        '400':
+          description: Bad Request. Estructura JSON inválida.
+        '403':
+          description: Forbidden. Token JWT inválido o expirado.
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: dr.roberto@hospital.com
+        password:
+          type: string
+          format: password
+          example: Secr3tPassw0rd!
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        userId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        role:
+          type: string
+          example: MEDICO
+    BiometricPayload:
+      type: object
+      required:
+        - patientId
+        - deviceId
+        - heartRate
+      properties:
+        patientId:
+          type: integer
+          example: 4501
+        deviceId:
+          type: integer
+          example: 991
+        heartRate:
+          type: integer
+          example: 75
+          description: Latidos por minuto
+        spO2:
+          type: integer
+          example: 98
+          description: Saturación de oxígeno en sangre
+        steps:
+          type: integer
+          example: 1450

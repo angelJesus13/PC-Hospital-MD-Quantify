@@ -1,7 +1,7 @@
-# QUANTIFY - Habit Tracker & Gamification Engine
+# PC-Hospital-MD (Medical Register & Remote Monitoring)
 
 <p align="center">
-  <img src="./assets/logo.jpg" alt="Quantify Technology Logo" width="220" style="border-radius: 8px;" />
+  <img src="./assets/logo.jpg" alt="Hospital MD Logo" width="220" style="border-radius: 8px;" />
 </p>
 
 <div align="center">
@@ -12,30 +12,14 @@
 
 ---
 
-### DESCRIPCIÓN
+### DESCRIPCIÓN Y PROPÓSITO DEL SISTEMA (Criterio 01)
 
-**Quantify** es una plataforma de ingeniería aplicada al bienestar personal. No es solo un rastreador de hábitos; es un motor de gamificación avanzado que utiliza una arquitectura híbrida para monitorear, analizar y premiar la disciplina humana mediante métricas de precisión y algoritmos de racha real.
+**PC-Hospital-MD** es una plataforma integral de Registros Médicos (EHR) y monitoreo remoto de pacientes ambulatorios. Diseñado por el **Equipo Quantify**, su propósito es proveer a los profesionales de la salud un Dashboard en tiempo real que reciba y procese signos vitales mediante una arquitectura híbrida de alta disponibilidad.
 
-### PLANTEAMIENTO DEL PROBLEMA
-
-En la actualidad, la mayoría de los habit trackers sufren de "inflación de métricas". Los usuarios pierden la motivación porque el sistema no valida el esfuerzo real o carece de una base de datos sólida para auditorías de salud a largo plazo. Existe una falta de herramientas que integren biometría básica con gamificación de alta fidelidad.
-
-### PROPUESTA DE SOLUCIÓN
-
-Implementar una aplicación de alto rendimiento que separe la gestión operativa de usuarios (SQL) de la analítica de logs masiva (NoSQL). La solución incluye un **Motor de Gamificación** que valida la racha basándose en logs reales de actividad, garantizando que cada logro sea un reflejo veraz de la disciplina del usuario.
-
-### OBJETIVO GENERAL
-
-Desarrollar un ecosistema digital integral que fomente la creación de hábitos mediante un sistema de recompensas dinámico, proporcionando una interfaz premium y una infraestructura de datos escalable para el seguimiento de metas personales.
-
-### OBJETIVOS ESPECÍFICOS
-
-- **Motor de Gamificación de Precisión**: Validar rachas mediante auditoría cruzada en MongoDB.
-- **Arquitectura Híbrida**: Utilizar MySQL para integridad transaccional (Usuarios) y MongoDB para logs de alto volumen.
-- **Interfaz de Alto Nivel**: Proporcionar una experiencia de usuario (UX) basada en el diseño "Engineering Aesthetic".
-- **Sistema de Población de Datos**: Capacidad para inyectar y analizar hasta 300,000 registros para pruebas de estrés.
-
----
+#### Dependencias de Subsistemas Externos y Autonomía
+Para garantizar el funcionamiento **autónomo**, el núcleo de la aplicación (Gestión de expedientes y Autenticación) no depende de servicios de terceros. Sin embargo, se delimitan las siguientes integraciones externas:
+1.  **Wearables API (Terceros):** Los sensores físicos (relojes) emiten POSTs a nuestra API. Si el wearable pierde conexión, nuestro sistema opera autónomamente con los datos cacheados.
+2.  **Notificaciones SMS/Email (Opcional):** Dependencia de Twilio/SendGrid para alertas críticas fuera de la plataforma web.
 
 ### STACK TECNOLÓGICO
 
@@ -47,50 +31,75 @@ Desarrollar un ecosistema digital integral que fomente la creación de hábitos 
 
 ---
 
-### ARQUITECTURA DEL SISTEMA
+### GUÍA DE INSTALACIÓN Y CONFIGURACIÓN (Criterio 02)
 
-```mermaid
-graph TD
-    A[Frontend React] -->|API REST| B[Express Server]
-    B -->|Sequelize| C[(MySQL: Users/Habits)]
-    B -->|Mongoose| D[(MongoDB: Activity Logs)]
-    B -->|Engine| E[Gamification Engine]
-    E -->|Audit| D
-    E -->|Update| C
+Para desplegar localmente el entorno de desarrollo, asegúrese de cumplir estrictamente este orden:
+
+**1. Requisitos Previos (Versiones)**
+*   Node.js (v18.17.0 LTS o superior).
+*   MySQL (v8.0+) ejecutándose en el puerto `3306`.
+*   MongoDB (v6.0+) ejecutándose localmente en el puerto `27017` o un clúster de Atlas.
+*   Git para clonar el repositorio.
+
+**2. Clonación e Instalación de Dependencias**
+```bash
+git clone https://github.com/angelJesus13/PC-Hospital-MD-Quantify.git
+cd PC-Hospital-MD-Quantify
+# Instalar dependencias del backend y frontend
+cd Deliverables/API && npm install
+cd ../WebApp/Source/FrontEnd && npm install
 ```
 
----
+**3. Archivos de Entorno (.env.example)**
+Dentro de la carpeta `API/`, copie el archivo de ejemplo y configure sus variables locales:
+```bash
+cp .env.example .env
+```
+*Contenido clave del `.env`:*
+```env
+PORT=3000
+DB_HOST=127.0.0.1
+DB_USER=root
+DB_PASS=Secreta123
+DB_NAME=hospital_db
+MONGO_URI=mongodb://localhost:27017/biometrics
+JWT_SECRET=su_clave_segura_rs256
+```
 
-### ESTRUCTURA DE LA DOCUMENTACIÓN (EL ENCARPETADO)
-
-A continuación se detalla la arquitectura de documentación conceptual del proyecto, facilitando el acceso directo a los READMEs explicativos de cada sección:
-
-- 📂 **PC-Hospital-MD-Quantify/**
-  - 📂 **Docs/**
-    - 📂 `BRs/` _(Requerimientos de Negocio)_ ─── 📄 **[README.md](./Docs/BRs/README.md)**
-    - 📂 `FRs/` _(Requerimientos Funcionales)_ ─── 📄 **[README.md](./Docs/FRs/README.md)**
-    - 📂 `GUIs/` _(Interfaces Gráficas)_ ─── 📄 **[README.md](./Docs/GUIs/README.md)**
-    - 📂 `NFRs/` _(Requerimientos No Funcionales)_ ─── 📄 **[README.md](./Docs/NFRs/README.md)**
-    - 📂 `UHs/` _(Historias de Usuario)_ ─── 📄 **[README.md](./Docs/UHs/README.md)**
-    - 📂 `URs/` _(Requerimientos de Usuario)_ ─── 📄 **[README.md](./Docs/URs/README.md)**
-
----
-
-## Equipo de Desarrollo
-
-| Colaborador | Rol | Github | Estado |
-| :--- | :--- | :--- | :--- |
-| **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
-| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Revisado y Aprobado |
-| **Al Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Revisado y Aprobado |
-| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Revisado y Aprobado |
-| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Revisado y Aprobado |
+**4. Orden de Arranque de los Subsistemas**
+1.  Inicie los motores de bases de datos (MySQL y MongoDB).
+2.  Levante la API Backend: `cd Deliverables/API && npm run dev`.
+3.  Levante el Dashboard Frontend: `cd Deliverables/WebApp/Source/FrontEnd && npm start`.
 
 ---
 
-### INSTALACIÓN RÁPIDA
+### GUÍA DE PRUEBAS Y TESTING (Criterio 03)
 
-1. Clonar el repositorio.
-2. Instalar dependencias en `/backend` y `/frontend` con `npm install`.
-3. Configurar el archivo `.env` en el backend.
-4. Ejecutar `npm run dev` en ambas carpetas.
+El ecosistema cuenta con pruebas automatizadas (Jest/Supertest) diseñadas para ejecutarse tanto en aislamiento como en integración total.
+
+**1. Pruebas Autónomas (Unitarias con Mocks)**
+Para ejecutar las pruebas sin necesidad de levantar bases de datos externas (MySQL/MongoDB), el sistema provee *stubs* preconfigurados para las capas de persistencia.
+*   **Comando:** `npm run test:unit`
+*   **Alcance:** Evalúa la lógica de los controladores, el motor de alertas y validaciones JWT inyectando dependencias falsas (mocks).
+
+**2. Pruebas de Integración y Estrés (Dependencias Externas)**
+Estas pruebas requieren los motores de bases de datos activos, simulando ráfagas masivas desde los wearables.
+*   **Comando:** `npm run test:integration`
+*   **Alcance:** Prueba de carga insertando 300,000 registros biométricos (`wearable_logs`) en MongoDB mediante la librería `Artillery`.
+
+---
+
+### CONTRIBUCIÓN AL PROYECTO
+Las reglas para realizar Commits, Pull Requests (PRs) y las convenciones de Linting requeridas para todo el equipo multidisciplinario se detallan estrictamente en el documento 📄 **[CONTRIBUTING.md](./CONTRIBUTING.md)** (Criterio 20).
+
+---
+
+## Equipo de Desarrollo (Equipo Quantify)
+
+| Colaborador | Rol | Github |
+| :--- | :--- | :--- |
+| **Angel de Jesús Baños Téllez** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) |
+| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) |
+| **Al Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) |
+| **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) |
+| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) |

@@ -1,20 +1,36 @@
 # Requerimientos Funcionales (FRs) - PC-Hospital-MD
 
-Este documento define de forma específica las operaciones funcionales que el sistema de registros médicos (desarrollado con React, Express, Node y bases de datos híbridas) debe ejecutar.
+Este documento define las operaciones funcionales del ecosistema hospitalario, detallando entradas, salidas, precondiciones, flujos alternativos y criterios de aceptación, con trazabilidad directa a Historias de Usuario (UHs).
 
-## 1. Módulo de Autenticación y Perfiles (MySQL)
-*   **FR-01:** La API debe permitir el inicio de sesión de roles administrativos y profesionales de salud, validando contraseñas cifradas (bcrypt) y retornando un token JWT.
-*   **FR-02:** El sistema administrativo debe permitir el registro (CRUD) de expedientes de pacientes y la creación de perfiles para los médicos.
-*   **FR-03:** El sistema debe restringir el acceso a los datos de salud únicamente a los profesionales que estén directamente asignados al paciente correspondiente en la tabla `paciente_profesional`.
+## Módulo 1: Autenticación y Control de Accesos
+### FR-01: Autenticación de Personal Médico
+*   **Descripción:** El sistema debe permitir el inicio de sesión de roles administrativos y profesionales de salud.
+*   **Entradas:** `email` (string), `password` (string).
+*   **Salidas:** JWT Token (string), `userId` (UUID), `role` (string).
+*   **Precondiciones:** El usuario debe existir en la base de datos MySQL con estado "Activo".
+*   **Flujo Principal:** El usuario ingresa credenciales válidas -> El sistema cifra la contraseña y valida contra BBDD -> Retorna HTTP 200 y el token JWT.
+*   **Flujo Alternativo (Error):** Si las credenciales son inválidas -> El sistema retorna HTTP 401 "Unauthorized" sin generar token.
+*   **Criterio de Aceptación:** El inicio de sesión debe completarse en menos de 500ms y el token JWT debe estar firmado con RS256.
+*   **Trazabilidad:** Asociado a UH-05.
 
-## 2. Ingesta de Datos Médicos (MongoDB)
-*   **FR-04:** La API debe proporcionar un endpoint asíncrono para recibir peticiones estructuradas con métricas vitales (ritmo cardíaco, oxígeno, pasos) provenientes de dispositivos wearables vinculados a los pacientes.
-*   **FR-05:** Todo registro biométrico debe almacenarse de manera persistente en la colección `wearable_logs` de MongoDB, asociando la marca de tiempo exacta (`capturedAt`) y el `patientId`.
+## Módulo 2: Ingesta Biométrica (NoSQL)
+### FR-02: Recepción de Datos desde Wearables
+*   **Descripción:** La API REST proporcionará un endpoint asíncrono para recibir métricas continuas desde dispositivos de pacientes.
+*   **Entradas:** Payload JSON conteniendo `patientId`, `deviceId`, `heartRate`, `spO2`, `steps`.
+*   **Salidas:** Código HTTP 201 Created.
+*   **Precondiciones:** El `deviceId` debe estar vinculado a un `patientId` activo en la base de datos MySQL.
+*   **Flujo Principal:** Wearable envía payload POST -> La API recibe, asigna un `capturedAt` y guarda el documento en la colección `wearable_logs` de MongoDB -> Responde 201.
+*   **Flujo Alternativo:** Si el payload está incompleto (ej. falta `patientId`) -> La API retorna HTTP 400 "Bad Request".
+*   **Criterio de Aceptación:** El sistema debe soportar ráfagas asíncronas, garantizando inserción sin bloqueos (non-blocking I/O).
+*   **Trazabilidad:** Asociado a UH-03.
 
-## 3. Motor de Reglas y Alertas Clínicas
-*   **FR-06:** El sistema de backend debe evaluar los signos vitales entrantes contra umbrales médicos estándar (ej. detectar taquicardias).
-*   **FR-07:** Si se detecta un valor riesgoso, la API debe generar automáticamente un registro en la tabla de `alertas` (MySQL) e incluir la severidad y el tipo de alerta.
-*   **FR-08:** Las notificaciones de alerta deben ser enviadas en tiempo real (vía Socket.IO) al dashboard del médico responsable.
-
-## 4. Consultas de Historial Médico
-*   **FR-09:** Los médicos deben poder consultar desde su panel una gráfica consolidada del historial biométrico de los pacientes filtrada por fecha.
+## Módulo 3: Motor de Alertas Clínicas
+### FR-03: Generación de Alertas por Anomalías Vitales
+*   **Descripción:** El backend evaluará en tiempo real si las métricas biométricas superan los umbrales seguros.
+*   **Entradas:** Payload biométrico interno en memoria (ej. `heartRate > 100`).
+*   **Salidas:** Registro SQL en tabla `alertas`, Evento `Socket.IO`.
+*   **Precondiciones:** El servicio de evaluación (Motor de Alertas) debe estar activo tras la ingesta de datos.
+*   **Flujo Principal:** Ingesta detecta anomalía -> Escribe alerta en MySQL vinculando `patientId` -> Emite evento push al front-end médico.
+*   **Flujo Alternativo:** Falla en la conexión MySQL al escribir alerta -> El sistema encola el mensaje en RabbitMQ o similar para reintento automático.
+*   **Criterio de Aceptación:** La latencia entre la detección y la notificación frontend no debe exceder 1 segundo.
+*   **Trazabilidad:** Asociado a UH-06.
