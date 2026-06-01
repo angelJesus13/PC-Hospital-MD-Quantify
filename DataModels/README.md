@@ -2,58 +2,61 @@
 
 ## Descripcion general
 
-La carpeta `DataModels` centraliza los artefactos relacionados con el modelado de datos y el analisis inteligente del proyecto `PC-Hospital-MD-Quantify`. Su objetivo es mantener organizados los recursos utilizados para entrenar, evaluar y documentar los modelos que apoyan la interpretacion de la informacion clinica y operativa del sistema.
+La carpeta `DataModels` centraliza la documentacion y los artefactos futuros de
+los modelos analiticos de `PC-Hospital-MD-Quantify`. Su objetivo es mantener
+trazabilidad entre las fuentes SQL y NoSQL, los problemas analiticos, las
+variables utilizadas y la evidencia de evaluacion.
 
-## Objetivo
+Actualmente el repositorio contiene reglas clinicas deterministas y una
+propuesta documentada de modelos supervisados y no supervisados. Todavia no se
+incluyen modelos entrenados, notebooks de entrenamiento ni artefactos
+serializados.
 
-Esta seccion del repositorio sirve como punto de referencia para:
+## Documento principal
 
-- almacenar modelos desarrollados durante el proyecto;
-- conservar evidencia de experimentacion y evaluacion;
-- facilitar la trazabilidad de resultados;
-- apoyar la reproducibilidad del trabajo analitico.
-
-## Estructura de carpetas
-
-| Carpeta | Descripcion |
-| --- | --- |
-| `Supervised_LMs/` | Modelos supervisados, entrenados con una variable objetivo conocida. |
-| `Unsupervised_LMs/` | Modelos no supervisados enfocados en descubrimiento de patrones, agrupamientos o estructura oculta en los datos. |
-
-## Contenido esperado
-
-Dentro de esta carpeta pueden incluirse:
-
-- notebooks de exploracion, entrenamiento o validacion;
-- scripts de preprocesamiento y modelado;
-- modelos exportados o serializados;
-- reportes de resultados;
-- graficas, metricas y evidencia experimental.
-
-## Documentacion de modelos de datos
-
-El documento principal de modelado se encuentra en:
+La especificacion completa se encuentra en:
 
 - [`Data_Model_Documentation.md`](Data_Model_Documentation.md)
 
-Este archivo concentra la descripcion del MERE, MER, modelo relacional, diccionarios de datos SQL/NoSQL y schemas propuestos para el proyecto.
+Este documento describe:
 
-## Lineamientos de documentacion
+- la arquitectura de datos disponible;
+- las reglas analiticas ya implementadas en la API;
+- los modelos supervisados y no supervisados propuestos;
+- las variables, fuentes y metricas recomendadas;
+- el flujo de preparacion de datos;
+- las consideraciones de seguridad para informacion clinica.
 
-Para mantener esta seccion clara y util, se recomienda:
+## Estructura existente
 
-- usar nombres descriptivos para archivos y carpetas;
-- documentar el origen de los datos utilizados;
-- registrar metricas relevantes por experimento;
-- mantener evidencia suficiente para reproducir entrenamientos y pruebas.
+| Ruta | Uso |
+| --- | --- |
+| `Data_Model_Documentation.md` | Catalogo general y trazabilidad de modelos |
+| `Supervised_LMs/` | Espacio para modelos supervisados futuros |
+| `Unsupervised_LMs/` | Espacio para modelos no supervisados futuros |
+
+## Modelos documentados
+
+| ID | Modelo | Tipo | Estado |
+| --- | --- | --- | --- |
+| `SUP-01` | Riesgo de deterioro clinico | Supervisado | Propuesto |
+| `SUP-02` | Priorizacion de severidad diagnostica | Supervisado | Propuesto |
+| `UNS-01` | Segmentacion de perfiles clinicos | No supervisado | Propuesto |
+| `UNS-02` | Deteccion de patrones atipicos | No supervisado | Propuesto |
+
+## Lineamientos
+
+- Documentar la fuente y el rango temporal de los datos.
+- Mantener separados los datos sinteticos y los datos clinicos reales.
+- Evitar datos personales identificables en los datasets de entrenamiento.
+- Registrar variables, metricas, limitaciones y version de cada modelo.
+- Conservar evidencia reproducible en la carpeta correspondiente.
 
 ## Equipo de Desarrollo
 
 | Colaborador | Rol | Github | Estado |
 | :--- | :--- | :--- | :--- |
 | **Angel de Jesús** | Tech Lead & Architecture | [@angelJesus13](https://github.com/angelJesus13) | Revisado y Aprobado |
-| **Francisco Garcia** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Revisado y Aprobado |
-| **Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado confirmado |
+| **Francisco Garcia G** | Lead Backend Developer | [@F-Anks](https://github.com/F-Anks) | Revisado y Aprobado |
+| **Al Farias Leyva** | Frontend & Documentation | [@farias](https://github.com/farias) | Aprobado confirmado |
 | **Artiaga Morales** | QA & Data Science | [@artiaga](https://github.com/artiaga) | Completado |
-| **Brian Jesús Mendoza Márquez** | Fullstack Developer | [@BrianMendoza](https://github.com/BrianMendoza) | Aprobado |
-
